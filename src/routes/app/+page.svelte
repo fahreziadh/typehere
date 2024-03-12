@@ -7,7 +7,6 @@
 </script>
 
 <Headers title="List Form" />
-{JSON.stringify(data.form)}
 <div class="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
 	{#await data.listForm}
 		Loading...

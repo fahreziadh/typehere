@@ -6,7 +6,6 @@ export const load = (async (event) => {
 	const userId = session?.user?.id;
 
 	return {
-		form: await data.getFormById(),
 		listForm: data.getAllFormByUserId(userId),
 	};
 }) satisfies PageServerLoad;
@@ -14,13 +13,11 @@ export const load = (async (event) => {
 const data = {
 	getAllFormByUserId: async (userId?: string) => {
 		if (!userId) throw new Error('User not found');
+
 		return await db.query.form.findMany({
 			where(fields, { eq }) {
 				return eq(fields.authorId, userId ?? '');
 			}
 		});
 	},
-	getFormById: async () => {
-		return await db.query.form.findFirst();
-	}
 };
