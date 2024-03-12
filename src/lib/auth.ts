@@ -1,6 +1,6 @@
 import { SvelteKitAuth } from '@auth/sveltekit';
 import Google from '@auth/sveltekit/providers/google';
-import { GOOGLE_ID, GOOGLE_SECRET, AUTH_SECRET } from '$env/static/private';
+import { GOOGLE_ID, GOOGLE_SECRET, AUTH_SECRET, ENVIRONMENT } from '$env/static/private';
 import type { SvelteKitAuthConfig } from '@auth/sveltekit';
 import { DrizzleAdapter } from '@auth/drizzle-adapter';
 import { db } from './db/db';
@@ -19,7 +19,9 @@ export const { handle, signIn, signOut } = SvelteKitAuth(async () => {
 				return session;
 			}
 		},
-		trustHost: true
+		trustHost: true,
+		useSecureCookies: ENVIRONMENT === "development" ? false : true,
+		debug: true
 	};
 
 	return authOptions;

@@ -6,14 +6,14 @@
 @layer base {
   :root {
     --background: 0 0% 100%;
-    --foreground: 240 10% 4%;
+    --foreground: 240 6% 15%;
     --card: 0 0% 100%;
     --card-foreground: 240 10% 3.9%;
-    --primary: 160 84% 39%;
+    --primary: 350 89% 60%;
     --primary-foreground: 355.7 100% 97.3%;
     --secondary: 240 5% 96%;
-    --secondary-foreground: 240 5.9% 10%;
-    --border: 240 5% 96%;
+    --secondary-foreground: 240 5% 26%;
+    --border: 240 6% 90%;
     --input: 240 5.9% 90%;
     --ring: 346.8 77.2% 49.8%;
     --radius: 0.75rem;
@@ -24,7 +24,7 @@
     --foreground: 240 5% 96%;
     --card: 20 14.3% 6%;
     --card-foreground: 0 0% 95%;
-    --primary: 160 84% 39%;
+    --primary: 350 89% 60%;
     --primary-foreground: 355.7 100% 97.3%;
     --secondary: 20 14.3% 6%;
     --secondary-foreground: 0 0% 98%;
