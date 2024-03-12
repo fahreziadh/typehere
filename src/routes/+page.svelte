@@ -1,2 +1,5 @@
-<h1>Welcome to SvelteKit</h1>
-<p>Visit <a href="https://kit.svelte.dev">kit.svelte.dev</a> to read the documentation</p>
+<div>
+  Landing Page
+</div>
+
+<a href="/app" class="p-2 bg-zinc-100">App</a>
