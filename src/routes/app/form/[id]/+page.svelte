@@ -7,8 +7,6 @@
 	import { invalidateAll } from '$app/navigation';
 	import { applyAction, deserialize } from '$app/forms';
 	import { CheckCheck } from 'lucide-svelte';
-	import { fade, fly, blur } from 'svelte/transition';
-	import { toast } from 'svelte-sonner';
 
 	export let data: PageData;
 
@@ -39,7 +37,6 @@
 		}
 
 		status = 'saved';
-		toast.success("Berhasil menyimpan data!")
 		setTimeout(() => {
 			status = 'idle';
 		}, 1000);
