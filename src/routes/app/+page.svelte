@@ -17,7 +17,7 @@
 				href={`/app/form/${dataForm.id}`}
 			>
 				<div
-					class="flex justify-center items-center h-20 text-foreground font-medium md:text-base text-sm"
+					class="flex justify-center items-center h-20 text-foreground font-medium md:text-base text-sm p-4"
 				>
 					{dataForm.title ? dataForm.title : 'Untitled'}
 				</div>
