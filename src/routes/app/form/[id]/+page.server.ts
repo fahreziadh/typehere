@@ -1,5 +1,5 @@
 import { db } from '$lib/db/db';
-import { form } from '$lib/db/schemas';
+import { form, formContent } from '$lib/db/schemas';
 import { eq } from 'drizzle-orm';
 import type { PageServerLoad } from './$types';
 
@@ -29,7 +29,7 @@ const data = {
 import type { Actions } from './$types';
 
 export const actions = {
-	default: async ({ request }) => {
+	updateForm: async ({ request }) => {
 		const data = await request.formData();
 		const id = data.get('id')?.toString();
 		const title = data.get('title')?.toString();
@@ -40,5 +40,25 @@ export const actions = {
 				title: title ?? ''
 			})
 			.where(eq(form.id, id ?? ''));
+	},
+	addMoreContent: async ({ request }) => {
+		const data = await request.formData();
+		const formId = data.get('formId')?.toString();
+		const content = data.get('content')?.toString();
+		const order = data.get('order')?.toString();
+
+		if (!formId){
+			return;
+		}
+
+		await db.insert(formContent).values({
+			id: crypto.randomUUID(),
+			formId: formId,
+			order: parseInt(order ?? '0'),
+			content: content ?? ''
+		});
+
+		// update all the order after this
+		// await db.update(formContent).set()
 	}
 } satisfies Actions;

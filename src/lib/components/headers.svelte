@@ -1,4 +1,10 @@
 <script lang="ts">
-  export let title = ""
+	import { cn } from "$lib/utils";
+
+	let className = ''
+	export { className as class };
+
 </script>
-<div class="py-5 text-2xl font-bold">{title}</div>
+<div class={cn("py-5 text-2xl font-bold w-full", className)}>
+  <slot />
+</div>

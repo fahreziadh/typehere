@@ -1,5 +1,5 @@
 import { db } from '$lib/db/db';
-import { form } from '$lib/db/schemas';
+import { form, formContent } from '$lib/db/schemas';
 import { redirect } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 import { nanoid } from 'nanoid';
@@ -12,5 +12,13 @@ export const load = (async (event) => {
 	}
 	const id = nanoid(7);
 	await db.insert(form).values({ id: id, authorId: userId });
+	await db
+		.insert(formContent)
+		.values({
+			id: crypto.randomUUID(),
+			formId: id,
+			order: 0,
+			content: JSON.stringify({ title: 'Pertanyaan pertama....', type: 'short-text', description: '' })
+		});
 	return redirect(303, `/app/form/${id}`);
 }) satisfies PageServerLoad;

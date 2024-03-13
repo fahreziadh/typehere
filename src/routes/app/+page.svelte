@@ -1,16 +1,26 @@
 <script lang="ts">
-	import { CircleUserRound, MessageCircleQuestion } from 'lucide-svelte';
+	import { CircleUserRound, MessageCircleQuestion, Plus } from 'lucide-svelte';
 	import type { PageData } from './$types';
 	import Headers from '$lib/components/headers.svelte';
+	import { Button } from '$lib/components/button';
+	import EmptyForm from './form/empty-form.svelte';
 
 	export let data: PageData;
 </script>
 
-<Headers title="List Form" />
-<div class="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-	{#await data.listForm}
-		Loading...
-	{:then listForm}
+<Headers class="justify-between flex">
+	<h1>List form</h1>
+	<a href="/app/form/create">
+		<Button><Plus class="mr-2" size={16} />Tambah</Button>
+	</a>
+</Headers>
+{#await data.listForm}
+	Loading...
+{:then listForm}
+	{#if listForm.length === 0}
+		<EmptyForm />
+	{/if}
+	<div class="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
 		{#each listForm as dataForm}
 			<a
 				class="w-full group bg-background rounded-sm transition-all border border-foreground/10 hover:border-foreground/30 active:scale-95 active:opacity-50"
@@ -42,7 +52,7 @@
 				</div>
 			</a>
 		{/each}
-	{:catch error}
-		Cannot load list form
-	{/await}
-</div>
+	</div>
+{:catch error}
+	Cannot load list form
+{/await}

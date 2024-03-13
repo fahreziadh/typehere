@@ -7,6 +7,7 @@
 	import { invalidateAll } from '$app/navigation';
 	import { applyAction, deserialize } from '$app/forms';
 	import { CheckCheck } from 'lucide-svelte';
+	import Content from './content.svelte';
 
 	export let data: PageData;
 
@@ -17,6 +18,7 @@
 	$: isDirty = title !== data.form?.title;
 
 	async function handleSubmit(event: { currentTarget: EventTarget & HTMLFormElement }) {
+		console.log(event.currentTarget.action)
 		status = 'loading';
 		const formData = new FormData(event.currentTarget);
 		if (!id) {
@@ -25,10 +27,9 @@
 		// add the form ID to the data
 		formData.append('id', id);
 
-		const response = await fetch(event.currentTarget.action, {
+		const response = await fetch(`${event.currentTarget.action}?/updateForm`, {
 			method: 'POST',
 			body: formData
-
 		});
 		const result: ActionResult = deserialize(await response.text());
 
@@ -43,6 +44,7 @@
 
 		applyAction(result);
 	}
+
 </script>
 
 <form method="POST" on:submit|preventDefault={handleSubmit}>
@@ -52,11 +54,11 @@
 		</div>
 		<Button variant="default" type="submit" disabled={status !== 'idle' || !isDirty}>
 			{#if status === 'loading'}
-			Loading...
-			{:else if status ==="saved"}
-			Tersimpan <CheckCheck class="ml-2" size={16}/>
+				Loading...
+			{:else if status === 'saved'}
+				Tersimpan <CheckCheck class="ml-2" size={16} />
 			{:else}
-			Simpan
+				Simpan
 			{/if}
 		</Button>
 	</div>
@@ -78,14 +80,11 @@
 			/>
 		</div>
 
-		<div
-			class="rounded-md aspect-[16/10] border border-border mt-8 mb-4 shadow-sm flex items-center justify-center"
-		>
-			<Button size="lg" variant="outline"><Plus class="mr-2" size={18} />Tambahkan</Button>
-		</div>
-		<div class="flex items-center flex-row justify-center gap-2 mt-4">
+		<Content data={formData?.contents}/>
+
+		<!-- <div class="flex items-center flex-row justify-center gap-2 mt-4">
 			<Button variant="outline">Prev</Button>
 			<Button variant="outline">Next</Button>
-		</div>
+		</div> -->
 	{/await}
 </form>
