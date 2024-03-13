@@ -5,13 +5,12 @@
 	import type { formContent } from '$lib/db/schemas';
 	import { cn } from '$lib/utils';
 	import type { ActionResult } from '@sveltejs/kit';
-	import { Plus } from 'lucide-svelte';
+	import { Plus, Trash } from 'lucide-svelte';
 	import { onMount } from 'svelte';
-	import { scale } from 'svelte/transition';
+	import { fade, scale, slide } from 'svelte/transition';
 
 	export let data: (typeof formContent.$inferSelect)[] | null = null;
-
-	const formId = data?.[0]?.formId;
+	export let formId = ''
 	$: listContent =
 		data?.map((item) => {
 			const content = JSON.parse(item.content as string) as {
@@ -24,7 +23,8 @@
 	let selectedContent: (typeof listContent)[0] | null = null;
 	let status: 'idle' | 'loading' = 'idle';
 	$: isDirty =
-		JSON.stringify(selectedContent?.content) !== data?.find((e) => e.id === selectedContent?.id)?.content
+		JSON.stringify(selectedContent?.content) !==
+		data?.find((e) => e.id === selectedContent?.id)?.content;
 
 	onMount(() => {
 		if (listContent.length > 0) {
@@ -34,7 +34,7 @@
 
 	async function addMoreContent(order: number) {
 		if (!formId) {
-			throw new Error('No form ID');
+			return alert("No form ID");
 		}
 		status = 'loading';
 		const formData = new FormData();
@@ -71,14 +71,97 @@
 			selectedContent = newContent;
 		}
 	}
+
+	async function deleteContent(id: string) {
+		if (!formId) {
+			throw new Error('No form ID');
+		}
+		status = 'loading';
+		const formData = new FormData();
+
+		formData.append('formId', formId);
+		formData.append('order', selectedContent?.order?.toString() ?? '');
+		formData.append('id', id);
+
+		const response = await fetch(`/app/form/${formId}?/deleteContent`, {
+			method: 'POST',
+			body: formData
+		});
+
+		const result: ActionResult = deserialize(await response.text());
+
+		if (result.type === 'success') {
+			await invalidateAll();
+		}
+
+		status = 'idle';
+
+		const newContent = listContent[0];
+		if (newContent) {
+			selectedContent = newContent;
+		} else {
+			selectedContent = null;
+		}
+
+		applyAction(result);
+	}
+
+	async function updateContent() {
+		if (!formId) {
+			throw new Error('No form ID');
+		}
+		status = 'loading';
+		const formData = new FormData();
+
+		formData.append('formId', formId);
+		formData.append('id', selectedContent?.id ?? '');
+		formData.append('content', JSON.stringify(selectedContent?.content));
+
+		const response = await fetch(`/app/form/${formId}?/updateContent`, {
+			method: 'POST',
+			body: formData
+		});
+
+		const result: ActionResult = deserialize(await response.text());
+
+		if (result.type === 'success') {
+			await invalidateAll();
+		}
+
+		status = 'idle';
+
+		applyAction(result);
+	}
 </script>
 
 <div
 	class="rounded-md relative aspect-[16/9] p-4 md:p-8 border border-border mt-8 mb-4 shadow-sm flex flex-col justify-center"
 >
+	{#if !selectedContent}
+		<h1 class="mb-4 text-2xl">Tidak ada pertanyaan</h1>
+		<Button
+			size="lg"
+			class="w-max"
+			disabled={status === 'loading'}
+			on:click={() => {
+				addMoreContent(1);
+			}}><Plus class="mr-2" size={18} />Buat baru</Button
+		>
+	{/if}
 	{#if selectedContent}
-		<h1 class="text-3xl font-medium mb-10 opacity-30 absolute top-5 left-5">
+		<h1 class="text-3xl font-medium opacity-30 absolute top-5 left-5">
 			#{selectedContent?.order}
+		</h1>
+		<h1 class="text-3xl font-medium absolute bottom-5 left-5">
+			<Button
+				type="button"
+				size="icon-lg"
+				variant="destructive"
+				disabled={status === 'loading'}
+				on:click={() => {
+					deleteContent(selectedContent?.id ?? '');
+				}}><Trash size={20} /></Button
+			>
 		</h1>
 
 		<textarea
@@ -89,13 +172,23 @@
 		/>
 		<input
 			type="text"
+			bind:value={selectedContent.content.description}
 			name="description"
 			placeholder="Tambahkan deskripsi (optional)"
 			class="bg-transparent border-none outline-none text-xl font-medium"
 		/>
 
 		{#if isDirty}
-			<Button class="mt-5 w-max">Simpan</Button>
+			<div transition:slide={{ axis: 'y' }}>
+				<Button
+					class="mt-5 w-max"
+					type="button"
+					on:click={() => {
+						updateContent();
+					}}
+					disabled={status === 'loading'}>Simpan</Button
+				>
+			</div>
 		{/if}
 	{/if}
 </div>
@@ -124,12 +217,21 @@
 				<div
 					class="absolute top-2 left-2 w-[20px] flex items-center justify-center text-sm text-foreground/30 select-none font-medium"
 				>
-					#{index + 1}
+					#{content.order}
 				</div>
+				<Button
+					type="button"
+					disabled={status === 'loading'}
+					on:click={() => deleteContent(content.id)}
+					size="icon-sm"
+					class="absolute bottom-2 right-2 grayscale group-hover:grayscale-0 opacity-50 group-hover:opacity-100"
+				>
+					<Trash size={12} />
+				</Button>
 			</button>
 			<div
 				class={cn(
-					'flex items-center px-1 justify-center transition-all duration-100 ease-in-out group/add delay-100',
+					'flex items-center px-1 justify-center transition-all duration-100 ease-in-out group/add delay-100 relative',
 					index === listContent.length - 1 ? 'w-14' : 'hover:w-14 opacity-50 hover:opacity-100 w-4'
 				)}
 			>
@@ -137,15 +239,19 @@
 					class={cn(
 						index === listContent.length - 1
 							? ''
-							: 'h-4 w-2 rounded-full bg-foreground/50 block group-hover/add:hidden'
+							: 'h-4 w-2 rounded-full bg-foreground/50 opacity-100 group-hover/add:opacity-0 transition-all'
 					)}
 				></div>
 				<Button
-					class={cn(index === listContent.length - 1 ? '' : 'hidden group-hover/add:block')}
+					class={cn(
+						index === listContent.length - 1
+							? ''
+							: 'group-hover/add:opacity-100 opacity-0 transition-all absolute'
+					)}
 					disabled={status === 'loading'}
 					type="button"
 					variant="secondary"
-					on:click={() => addMoreContent(index + 1)}><Plus size={16} /></Button
+					on:click={() => addMoreContent((content.order ?? 1) + 1)}><Plus size={16} /></Button
 				>
 			</div>
 		</div>

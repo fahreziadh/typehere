@@ -1,5 +1,5 @@
 import { relations, sql } from 'drizzle-orm';
-import { sqliteTable, text } from 'drizzle-orm/sqlite-core';
+import { index, sqliteTable, text } from 'drizzle-orm/sqlite-core';
 import { users } from '.';
 import { formContent } from './form-content';
 
@@ -15,6 +15,11 @@ export const form = sqliteTable('form', {
 		.default(sql`CURRENT_TIMESTAMP`)
 		.notNull(),
 	deletedAt: text('deleted_at')
+},(table) => {
+	return {
+		authorIdIndex: index('author_id_index').on(table.authorId),
+		idIndex: index('id_index').on(table.id)
+	};
 });
 
 export const formRelation = relations(form, ({ many, one }) => ({

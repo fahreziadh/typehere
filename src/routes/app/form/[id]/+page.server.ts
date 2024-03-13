@@ -17,7 +17,7 @@ const data = {
 			with: {
 				contents: {
 					orderBy(fields, operators) {
-						return operators.asc(fields.order)
+						return operators.asc(fields.order);
 					}
 				}
 			},
@@ -59,7 +59,7 @@ export const actions = {
 		await db.insert(formContent).values({
 			id: id,
 			formId: formId,
-			order: parseInt(order ?? '1')+1,
+			order: parseInt(order ?? '1'),
 			content: content ?? ''
 		});
 
@@ -72,8 +72,44 @@ export const actions = {
 				and(
 					ne(formContent.id, id),
 					eq(formContent.formId, formId ?? ''),
-					gte(formContent.order, parseInt(order ?? '1')+1)
+					gte(formContent.order, parseInt(order ?? '1'))
 				)
 			);
+	},
+	deleteContent: async ({ request }) => {
+		const data = await request.formData();
+		const id = data.get('id')?.toString();
+		const formId = data.get('formId')?.toString();
+		const order = data.get('order')?.toString();
+
+		if (!formId || !id) {
+			return;
+		}
+
+		await db.delete(formContent).where(eq(formContent.id, id ?? ''));
+
+		await db
+			.update(formContent)
+			.set({
+				order: sql`${formContent.order}-1`
+			})
+			.where(
+				and(
+					eq(formContent.formId, formId ?? ''),
+					gte(formContent.order, parseInt(order ?? '1'))
+				)
+			);
+	},
+	updateContent: async ({ request }) => {
+		const data = await request.formData();
+		const id = data.get('id')?.toString();
+		const content = data.get('content')?.toString();
+
+		await db
+			.update(formContent)
+			.set({
+				content: content ?? ''
+			})
+			.where(eq(formContent.id, id ?? ''));
 	}
 } satisfies Actions;

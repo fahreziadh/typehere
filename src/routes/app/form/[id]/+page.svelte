@@ -7,6 +7,7 @@
 	import { applyAction, deserialize } from '$app/forms';
 	import { CheckCheck } from 'lucide-svelte';
 	import Content from './content.svelte';
+	import { slide } from 'svelte/transition';
 
 	export let data: PageData;
 
@@ -17,7 +18,7 @@
 	$: isDirty = title !== data.form?.title;
 
 	async function handleSubmit(event: { currentTarget: EventTarget & HTMLFormElement }) {
-		console.log(event.currentTarget.action)
+		console.log(event.currentTarget.action);
 		status = 'loading';
 		const formData = new FormData(event.currentTarget);
 		if (!id) {
@@ -43,7 +44,6 @@
 
 		applyAction(result);
 	}
-
 </script>
 
 <form method="POST" on:submit|preventDefault={handleSubmit}>
@@ -65,11 +65,14 @@
 		<p>Loading...</p>
 	{:then formData}
 		<div class="flex flex-col">
-			<label
-				for="title"
-				class={cn('text-sm transition-all w-max', title?.length ? 'opacity-70' : '-mb-4 opacity-0')}
-				>Judul form</label
-			>
+			{#if title?.length}
+				<label
+					transition:slide={{ axis: 'y' }}
+					for="title"
+					class={cn('text-sm w-max opacity-70')}
+					>Judul</label
+				>
+			{/if}
 			<input
 				name="title"
 				type="text"
@@ -79,7 +82,7 @@
 			/>
 		</div>
 
-		<Content data={formData?.contents}/>
+		<Content data={formData?.contents} formId={formData?.id}/>
 
 		<!-- <div class="flex items-center flex-row justify-center gap-2 mt-4">
 			<Button variant="outline">Prev</Button>
