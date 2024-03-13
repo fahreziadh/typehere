@@ -61,8 +61,8 @@
 				type="button"
 				on:click={() => selectContent(index)}
 				class={cn(
-					'aspect-[16/10] hover:border-foreground cursor-pointer min-w-[200px] border rounded-md relative',
-					index === selectedOrder ? 'border-primary' : 'border-border'
+					'aspect-[16/10] hover:border-foreground cursor-pointer min-w-[200px] active:scale-95 transition-transform border rounded-md relative',
+					index === selectedOrder ? 'border-foreground' : 'border-border'
 				)}
 			>
 				<div
@@ -73,19 +73,19 @@
 			</button>
 			<div
 				class={cn(
-					'flex items-center px-1 justify-center transition-all duration-100 ease-in-out group/add',
+					'flex items-center px-1 justify-center transition-all duration-100 ease-in-out group/add delay-100',
 					index === listContent.length - 1 ? 'w-14' : 'hover:w-14 opacity-50 hover:opacity-100 w-4'
 				)}
 			>
 				<div
-					class={cn(
+					class={cn("delay-100 transition-all",
 						index === listContent.length - 1
 							? ''
 							: 'h-4 w-2 rounded-full bg-foreground/50 block group-hover/add:hidden'
 					)}
 				></div>
 				<Button
-					class={cn(index === listContent.length - 1 ? '' : 'hidden group-hover/add:block')}
+					class={cn("delay-100 transition-all",index === listContent.length - 1 ? '' : 'hidden group-hover/add:block')}
 					type="button"
 					variant="secondary"
 					on:click={() => addMoreContent(index + 1)}><Plus size={16} /></Button
