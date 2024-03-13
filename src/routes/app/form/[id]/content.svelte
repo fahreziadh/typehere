@@ -6,6 +6,7 @@
 	import { cn } from '$lib/utils';
 	import type { ActionResult } from '@sveltejs/kit';
 	import { Plus } from 'lucide-svelte';
+	import { fade, scale } from 'svelte/transition';
 
 	export let data: (typeof formContent.$inferSelect)[] | null = null;
 
@@ -55,6 +56,7 @@
 <div class="w-full overflow-x-auto flex flex-row scrollbar-thin scrollbar-webkit pb-4 pt-2">
 	{#each listContent as content, index}
 		<div
+			transition:scale
 			class={cn('group flex flex-row', status === 'loading' ? 'animate-pulse cursor-progress' : '')}
 		>
 			<button
@@ -78,14 +80,18 @@
 				)}
 			>
 				<div
-					class={cn("delay-100 transition-all",
+					class={cn(
+						'delay-100 transition-all',
 						index === listContent.length - 1
 							? ''
 							: 'h-4 w-2 rounded-full bg-foreground/50 block group-hover/add:hidden'
 					)}
 				></div>
 				<Button
-					class={cn("delay-100 transition-all",index === listContent.length - 1 ? '' : 'hidden group-hover/add:block')}
+					class={cn(
+						'delay-100 transition-all',
+						index === listContent.length - 1 ? '' : 'hidden group-hover/add:block'
+					)}
 					type="button"
 					variant="secondary"
 					on:click={() => addMoreContent(index + 1)}><Plus size={16} /></Button
