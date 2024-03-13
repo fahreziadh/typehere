@@ -23,6 +23,8 @@
 		}) ?? [];
 	let selectedContent: (typeof listContent)[0] | null = null;
 	let status: 'idle' | 'loading' = 'idle';
+	$: isDirty =
+		JSON.stringify(selectedContent?.content) !== data?.find((e) => e.id === selectedContent?.id)?.content
 
 	onMount(() => {
 		if (listContent.length > 0) {
@@ -72,7 +74,7 @@
 </script>
 
 <div
-	class="rounded-md relative aspect-[16/10] p-4 md:p-8 border border-border mt-8 mb-4 shadow-sm flex flex-col justify-center"
+	class="rounded-md relative aspect-[16/9] p-4 md:p-8 border border-border mt-8 mb-4 shadow-sm flex flex-col justify-center"
 >
 	{#if selectedContent}
 		<h1 class="text-3xl font-medium mb-10 opacity-30 absolute top-5 left-5">
@@ -91,6 +93,10 @@
 			placeholder="Tambahkan deskripsi (optional)"
 			class="bg-transparent border-none outline-none text-xl font-medium"
 		/>
+
+		{#if isDirty}
+			<Button class="mt-5 w-max">Simpan</Button>
+		{/if}
 	{/if}
 </div>
 <div class="w-full overflow-x-auto flex flex-row scrollbar-thin scrollbar-webkit pb-4 pt-2">
@@ -104,7 +110,7 @@
 				type="button"
 				on:click={() => selectContent(content.id)}
 				class={cn(
-					'aspect-[16/10] hover:border-foreground/30 cursor-pointer min-w-[200px] max-w-[200px] active:scale-95 transition-transform border rounded-md relative',
+					'aspect-[16/9] hover:border-foreground/30 cursor-pointer min-w-[200px] max-w-[200px] active:scale-95 transition-transform border rounded-md relative',
 					content.id === selectedContent?.id ? 'border-foreground' : 'border-border'
 				)}
 			>
