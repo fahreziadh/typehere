@@ -60,7 +60,10 @@
 			<button
 				type="button"
 				on:click={() => selectContent(index)}
-				class="aspect-[16/10] hover:border-foreground cursor-pointer min-w-[200px] border rounded-md relative"
+				class={cn(
+					'aspect-[16/10] hover:border-foreground cursor-pointer min-w-[200px] border rounded-md relative',
+					index === selectedOrder ? 'border-primary' : 'border-border'
+				)}
 			>
 				<div
 					class="absolute top-2 right-2 w-[20px] flex items-center justify-center rounded-full h-[20px] group-hover:bg-primary group-hover:text-background transition-colors text-xs text-foreground/80 select-none font-medium border"
@@ -84,7 +87,7 @@
 				<Button
 					class={cn(index === listContent.length - 1 ? '' : 'hidden group-hover/add:block')}
 					type="button"
-          variant="secondary"
+					variant="secondary"
 					on:click={() => addMoreContent(index + 1)}><Plus size={16} /></Button
 				>
 			</div>
