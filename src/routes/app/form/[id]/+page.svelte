@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { Button } from '$lib/components/button';
 	import { cn } from '$lib/utils';
-	import { Plus } from 'lucide-svelte';
 	import type { PageData } from './$types';
 	import { type ActionResult } from '@sveltejs/kit';
 	import { invalidateAll } from '$app/navigation';

@@ -40,11 +40,10 @@ export default {
 				".scrollbar-thin" :{
 					scrollbarWidth: "thin",
 					scrollbarColor: "rgb(31 29 29) white",
-					borderRadius: "20px",
 				},
 				".scrollbar-webkit": {
 					"&::-webkit-scrollbar":{
-						width: "8px"
+						width: "8px",
 					},
 					"&::-webkit-scrollbar-track":{
 						background: "white"

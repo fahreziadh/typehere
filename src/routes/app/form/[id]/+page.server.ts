@@ -1,11 +1,11 @@
 import { db } from '$lib/db/db';
 import { form, formContent } from '$lib/db/schemas';
-import { eq } from 'drizzle-orm';
+import { and, eq, gte, ne, sql } from 'drizzle-orm';
 import type { PageServerLoad } from './$types';
 
 export const load = (async ({ params }) => {
 	return {
-		form:await data.getFormById(params.id),
+		form: await data.getFormById(params.id)
 	};
 }) satisfies PageServerLoad;
 
@@ -14,14 +14,18 @@ const data = {
 		if (!id) throw new Error('Need id bruh!');
 
 		return await db.query.form.findFirst({
-            with: {
-                contents: true
-            },
+			with: {
+				contents: {
+					orderBy(fields, operators) {
+						return operators.asc(fields.order)
+					}
+				}
+			},
 			where(fields, { eq }) {
 				return eq(fields.id, id ?? '');
 			}
 		});
-	},
+	}
 };
 
 /* ================ACTIONS================ */
@@ -46,19 +50,30 @@ export const actions = {
 		const formId = data.get('formId')?.toString();
 		const content = data.get('content')?.toString();
 		const order = data.get('order')?.toString();
+		const id = data.get('id')?.toString();
 
-		if (!formId){
+		if (!formId || !id) {
 			return;
 		}
 
 		await db.insert(formContent).values({
-			id: crypto.randomUUID(),
+			id: id,
 			formId: formId,
-			order: parseInt(order ?? '0'),
+			order: parseInt(order ?? '1')+1,
 			content: content ?? ''
 		});
 
-		// update all the order after this
-		// await db.update(formContent).set()
+		await db
+			.update(formContent)
+			.set({
+				order: sql`${formContent.order}+1`
+			})
+			.where(
+				and(
+					ne(formContent.id, id),
+					eq(formContent.formId, formId ?? ''),
+					gte(formContent.order, parseInt(order ?? '1')+1)
+				)
+			);
 	}
 } satisfies Actions;

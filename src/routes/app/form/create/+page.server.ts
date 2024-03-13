@@ -17,8 +17,8 @@ export const load = (async (event) => {
 		.values({
 			id: crypto.randomUUID(),
 			formId: id,
-			order: 0,
-			content: JSON.stringify({ title: 'Pertanyaan pertama....', type: 'short-text', description: '' })
+			order: 1,
+			content: JSON.stringify({ title: '', type: 'short-text', description: '' })
 		});
 	return redirect(303, `/app/form/${id}`);
 }) satisfies PageServerLoad;

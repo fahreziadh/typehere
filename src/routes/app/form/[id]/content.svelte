@@ -6,14 +6,29 @@
 	import { cn } from '$lib/utils';
 	import type { ActionResult } from '@sveltejs/kit';
 	import { Plus } from 'lucide-svelte';
-	import { fade, scale } from 'svelte/transition';
+	import { onMount } from 'svelte';
+	import { scale } from 'svelte/transition';
 
 	export let data: (typeof formContent.$inferSelect)[] | null = null;
 
 	const formId = data?.[0]?.formId;
-	$: listContent = data?.map((item) => JSON.parse(item.content as string)) ?? [];
-	let selectedOrder = 0;
+	$: listContent =
+		data?.map((item) => {
+			const content = JSON.parse(item.content as string) as {
+				title: string;
+				type: string;
+				description: string;
+			};
+			return { ...item, content };
+		}) ?? [];
+	let selectedContent: (typeof listContent)[0] | null = null;
 	let status: 'idle' | 'loading' = 'idle';
+
+	onMount(() => {
+		if (listContent.length > 0) {
+			selectedContent = listContent[0];
+		}
+	});
 
 	async function addMoreContent(order: number) {
 		if (!formId) {
@@ -22,9 +37,12 @@
 		status = 'loading';
 		const formData = new FormData();
 
+		const id = crypto.randomUUID();
+
 		formData.append('formId', formId);
+		formData.append('id', id);
 		formData.append('order', order.toString());
-		formData.append('content', JSON.stringify({}));
+		formData.append('content', JSON.stringify({ title: '', type: 'short-text', description: '' }));
 
 		const response = await fetch(`/app/form/${formId}?/addMoreContent`, {
 			method: 'POST',
@@ -34,43 +52,73 @@
 		const result: ActionResult = deserialize(await response.text());
 
 		if (result.type === 'success') {
-			invalidateAll();
+			await invalidateAll();
 		}
-
+		const newContent = listContent.find((e) => e.id === id);
+		if (newContent) {
+			selectedContent = newContent;
+		}
 		status = 'idle';
 
 		applyAction(result);
 	}
 
-	function selectContent(order: number) {
-		selectedOrder = order;
+	function selectContent(id: string) {
+		const newContent = listContent.find((e) => e.id === id);
+		if (newContent) {
+			selectedContent = newContent;
+		}
 	}
 </script>
 
 <div
-	class="rounded-md aspect-[16/10] border border-border mt-8 mb-4 shadow-sm flex flex-col items-center justify-center"
+	class="rounded-md relative aspect-[16/10] p-4 md:p-8 border border-border mt-8 mb-4 shadow-sm flex flex-col justify-center"
 >
-	{JSON.stringify(listContent?.[selectedOrder])}
-</div>
+	{#if selectedContent}
+		<h1 class="text-3xl font-medium mb-10 opacity-30 absolute top-5 left-5">
+			#{selectedContent?.order}
+		</h1>
 
+		<textarea
+			bind:value={selectedContent.content.title}
+			name="title"
+			placeholder="Tulis pertanyaan kamu disini..."
+			class="bg-transparent border-none outline-none text-2xl font-bold h-[40px] min-h-[40px] scrollbar-thin scrollbar-webkit"
+		/>
+		<input
+			type="text"
+			name="description"
+			placeholder="Tambahkan deskripsi (optional)"
+			class="bg-transparent border-none outline-none text-xl font-medium"
+		/>
+	{/if}
+</div>
 <div class="w-full overflow-x-auto flex flex-row scrollbar-thin scrollbar-webkit pb-4 pt-2">
-	{#each listContent as content, index}
+	{#each listContent as content, index (content.id)}
 		<div
 			transition:scale
 			class={cn('group flex flex-row', status === 'loading' ? 'animate-pulse cursor-progress' : '')}
 		>
 			<button
+				disabled={status === 'loading'}
 				type="button"
-				on:click={() => selectContent(index)}
+				on:click={() => selectContent(content.id)}
 				class={cn(
-					'aspect-[16/10] hover:border-foreground cursor-pointer min-w-[200px] active:scale-95 transition-transform border rounded-md relative',
-					index === selectedOrder ? 'border-foreground' : 'border-border'
+					'aspect-[16/10] hover:border-foreground/30 cursor-pointer min-w-[200px] max-w-[200px] active:scale-95 transition-transform border rounded-md relative',
+					content.id === selectedContent?.id ? 'border-foreground' : 'border-border'
 				)}
 			>
+				<div class="p-4 text-left font-semibold">
+					{#if selectedContent?.id === content.id}
+						{selectedContent.content.title ? selectedContent.content.title : `Untitled`}
+					{:else}
+						{content.content.title ? content.content.title : `Untitled`}
+					{/if}
+				</div>
 				<div
-					class="absolute top-2 right-2 w-[20px] flex items-center justify-center rounded-full h-[20px] group-hover:bg-primary group-hover:text-background transition-colors text-xs text-foreground/80 select-none font-medium border"
+					class="absolute top-2 left-2 w-[20px] flex items-center justify-center text-sm text-foreground/30 select-none font-medium"
 				>
-					{index + 1}
+					#{index + 1}
 				</div>
 			</button>
 			<div
@@ -81,17 +129,14 @@
 			>
 				<div
 					class={cn(
-						'delay-100 transition-all',
 						index === listContent.length - 1
 							? ''
 							: 'h-4 w-2 rounded-full bg-foreground/50 block group-hover/add:hidden'
 					)}
 				></div>
 				<Button
-					class={cn(
-						'delay-100 transition-all',
-						index === listContent.length - 1 ? '' : 'hidden group-hover/add:block'
-					)}
+					class={cn(index === listContent.length - 1 ? '' : 'hidden group-hover/add:block')}
+					disabled={status === 'loading'}
 					type="button"
 					variant="secondary"
 					on:click={() => addMoreContent(index + 1)}><Plus size={16} /></Button
