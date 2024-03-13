@@ -7,7 +7,7 @@
 	import type { ActionResult } from '@sveltejs/kit';
 	import { Hash, Plus, Trash } from 'lucide-svelte';
 	import { onMount } from 'svelte';
-	import { fade, scale, slide } from 'svelte/transition';
+	import { scale, slide } from 'svelte/transition';
 
 	export let data: (typeof formContent.$inferSelect)[] | null = null;
 	export let formId = ''
