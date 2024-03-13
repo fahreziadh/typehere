@@ -5,7 +5,7 @@
 	import type { formContent } from '$lib/db/schemas';
 	import { cn } from '$lib/utils';
 	import type { ActionResult } from '@sveltejs/kit';
-	import { Plus, Trash } from 'lucide-svelte';
+	import { Hash, Plus, Trash } from 'lucide-svelte';
 	import { onMount } from 'svelte';
 	import { fade, scale, slide } from 'svelte/transition';
 
@@ -168,14 +168,17 @@
 			bind:value={selectedContent.content.title}
 			name="title"
 			placeholder="Tulis pertanyaan kamu disini..."
-			class="bg-transparent border-none outline-none text-2xl font-bold h-[40px] min-h-[40px] scrollbar-thin scrollbar-webkit"
+			class="bg-transparent border-none outline-none text-2xl font-bold h-[60px] min-h-[40px] scrollbar-thin scrollbar-webkit"
 		/>
+		{#if selectedContent.content.description}
+		<label transition:slide for="description" class="opacity-50 text-sm">Deskripsi</label>
+		{/if}
 		<input
 			type="text"
 			bind:value={selectedContent.content.description}
 			name="description"
 			placeholder="Tambahkan deskripsi (optional)"
-			class="bg-transparent border-none outline-none text-xl font-medium"
+			class="bg-transparent border-none outline-none opacity-80 text-xl font-medium"
 		/>
 
 		{#if isDirty}
@@ -217,13 +220,14 @@
 				<div
 					class="absolute top-2 left-2 w-[20px] flex items-center justify-center text-sm text-foreground/30 select-none font-medium"
 				>
-					#{content.order}
+					<Hash size={16} /> {content.order}
 				</div>
 				<Button
 					type="button"
 					disabled={status === 'loading'}
 					on:click={() => deleteContent(content.id)}
 					size="icon-sm"
+					variant="destructive"
 					class="absolute bottom-2 right-2 grayscale group-hover:grayscale-0 opacity-50 group-hover:opacity-100"
 				>
 					<Trash size={12} />
