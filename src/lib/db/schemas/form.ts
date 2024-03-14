@@ -1,5 +1,5 @@
 import { relations, sql } from 'drizzle-orm';
-import { index, sqliteTable, text } from 'drizzle-orm/sqlite-core';
+import { index, integer, sqliteTable, text } from 'drizzle-orm/sqlite-core';
 import { users } from '.';
 import { formContent } from './form-content';
 
@@ -8,6 +8,7 @@ export const form = sqliteTable('form', {
 	title: text('title').default(''),
 	description: text('description'),
 	authorId: text('author_id').notNull(),
+	isPublished: integer('is_published', {mode: "boolean"}).default(false).notNull(),
 	createdAt: text('created_at')
 		.default(sql`CURRENT_TIMESTAMP`)
 		.notNull(),

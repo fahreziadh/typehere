@@ -3,6 +3,7 @@
 	import Footer from '$lib/components/footer.svelte';
 	import Navbar from '$lib/components/navbar.svelte';
 	import { cn } from '$lib/utils';
+	import { Toaster } from 'svelte-sonner';
 
 	import '../app.css';
 </script>
@@ -16,6 +17,7 @@
   <meta property="og:url" content={"https://typehere.fun/screenshot.webp"} />
   <meta property="twitter:url" content={"https://typehere.fun/screenshot.webp"} />
 </svelte:head>
+<Toaster position="bottom-center"/>
 <div
 	class={cn(
 		' h-1 bg-primary fixed top-0 left-0 transition-all duration-1000 ease-out',

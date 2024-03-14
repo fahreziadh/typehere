@@ -5,9 +5,10 @@
 	import type { formContent } from '$lib/db/schemas';
 	import { cn } from '$lib/utils';
 	import type { ActionResult } from '@sveltejs/kit';
-	import { Hash, Plus, Trash } from 'lucide-svelte';
+	import { CheckCircle2, Circle, Hash, Plus, Trash } from 'lucide-svelte';
 	import { onMount } from 'svelte';
-	import { scale, slide } from 'svelte/transition';
+	import { circOut, sineOut } from 'svelte/easing';
+	import { fade, fly, scale, slide } from 'svelte/transition';
 
 	export let data: (typeof formContent.$inferSelect)[] | null = null;
 	export let formId = '';
@@ -18,7 +19,7 @@
 				type: string;
 				description: string;
 			};
-			return { ...item, content };
+			return { ...item, content, isOptional: item.isOptional ?? false };
 		}) ?? [];
 	let selectedContent: (typeof listContent)[0] | null = null;
 	let status: 'idle' | 'loading' = 'idle';
@@ -56,6 +57,7 @@
 		if (result.type === 'success') {
 			await invalidateAll();
 		}
+
 		const newContent = listContent.find((e) => e.id === id);
 		if (newContent) {
 			selectedContent = newContent;
@@ -132,10 +134,41 @@
 
 		applyAction(result);
 	}
+
+	async function toggleOptional(id: string) {
+		if (!formId) {
+			throw new Error('No form ID');
+		}
+		status = 'loading';
+		const formData = new FormData();
+
+		formData.append('id', id);
+		formData.append('isOptional', selectedContent?.isOptional ? 'false' : 'true');
+
+		const response = await fetch(`?/toggleContentOptional`, {
+			method: 'POST',
+			body: formData
+		});
+
+		const result: ActionResult = deserialize(await response.text());
+
+		if (result.type === 'success') {
+			if (!selectedContent) return;
+			selectedContent = {
+				...selectedContent,
+				isOptional: !selectedContent?.isOptional
+			};
+		}
+
+		status = 'idle';
+
+		applyAction(result);
+	}
 </script>
 
 <div
-	class="rounded-md relative aspect-[16/14] md:aspect-[16/10] lg:aspect-[16/9] p-4 md:p-8 border border-border mt-8 mb-4 shadow-sm flex flex-col justify-center"
+	in:fade={{ easing: sineOut, duration: 500 }}
+	class="rounded-md relative aspect-[16/14] md:aspect-[16/10] lg:aspect-[16/9] p-4 md:p-8 border border-border mb-4 shadow-sm flex flex-col justify-center"
 >
 	{#if !selectedContent}
 		<h1 class="mb-4 text-2xl">Tidak ada pertanyaan</h1>
@@ -152,17 +185,30 @@
 		<h1 class="text-xl lg:text-2xl xl:text-3xl font-medium opacity-30 absolute top-5 left-5">
 			#{selectedContent?.order}
 		</h1>
-		<h1 class="text-3xl font-medium absolute bottom-5 left-5">
+		<div class="flex flex-row absolute bottom-5 right-5 gap-4">
 			<Button
 				type="button"
-				size="icon-lg"
-				variant="destructive"
+				variant={selectedContent.isOptional ? 'solid' : 'secondary'}
 				disabled={status === 'loading'}
 				on:click={() => {
-					deleteContent(selectedContent?.id ?? '');
-				}}><Trash size={20} /></Button
+					toggleOptional(selectedContent?.id ?? '');
+				}}
+				>{#if selectedContent.isOptional}
+					<CheckCircle2 size={18} class="mr-2" />
+					{:else}
+					<Circle size={18} class="mr-2" />
+				{/if} Opsional</Button
 			>
-		</h1>
+			<Button
+			type="button"
+			size="icon"
+			variant="destructive"
+			disabled={status === 'loading'}
+			on:click={() => {
+				deleteContent(selectedContent?.id ?? '');
+			}}><Trash size={16} /></Button
+		>
+		</div>
 
 		<textarea
 			spellcheck="false"
@@ -172,7 +218,9 @@
 			class="bg-transparent border-none outline-none text-base md:text-lg lg:text-xl xl:text-2xl font-bold h-[40px] lg:h-[60px] min-h-[40px] scrollbar-thin scrollbar-webkit"
 		/>
 		{#if selectedContent.content.description}
-			<label transition:slide for="description" class="opacity-50 text-xs md:text-sm">Deskripsi</label>
+			<label transition:slide for="description" class="opacity-50 text-xs md:text-sm"
+				>Deskripsi</label
+			>
 		{/if}
 		<input
 			type="text"
@@ -257,6 +305,7 @@
 					)}
 					disabled={status === 'loading'}
 					type="button"
+					size="icon"
 					variant="secondary"
 					on:click={() => addMoreContent((content.order ?? 1) + 1)}><Plus size={16} /></Button
 				>

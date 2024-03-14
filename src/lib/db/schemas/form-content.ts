@@ -9,6 +9,7 @@ export const formContent = sqliteTable(
 		formId: text('form_id').notNull(),
 		content: text('content', { mode: 'json' }), // should be formated as JSON
 		order: integer('order'),
+		isOptional: integer('is_optional', { mode: 'boolean' }).default(false),
 		createdAt: text('created_at')
 			.default(sql`CURRENT_TIMESTAMP`)
 			.notNull(),

@@ -9,11 +9,12 @@ const buttonVariants = tv({
 			default: "bg-background text-foreground border border-foreground hover:bg-foreground hover:text-background",
 			solid: "bg-foreground text-background border border-foreground hover:bg-background hover:text-foreground",
 			destructive: "bg-red-500/20 text-red-500 border border-red-500/20 hover:opacity-50",
+			success: "bg-green-500/20 text-green-500 border border-green-500/20 hover:opacity-50",
 			outline:
 				"border border-input bg-background hover:bg-foreground hover:text-background",
 			secondary: "bg-secondary text-secondary-foreground border hover:opacity-80",
 			ghost: "hover:bg-secondary hover:text-accent-foreground",
-			link: "text-primary underline-offset-4 hover:underline",
+			link: "text-foreground underline-offset-4 hover:underline",
 		},
 		size: {
 			default: "h-8 px-3 py-2",

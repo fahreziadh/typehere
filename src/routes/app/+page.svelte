@@ -3,32 +3,32 @@
 	import type { PageData } from './$types';
 	import Headers from '$lib/components/headers.svelte';
 	import { Button } from '$lib/components/button';
-	import EmptyForm from './form/empty-form.svelte';
+	import EmptyForm from './empty-form.svelte';
+	import Loading from './loading.svelte';
+	import { fade } from 'svelte/transition';
 
 	export let data: PageData;
 </script>
 
 <Headers class="justify-between flex">
 	<h1>List form</h1>
-	<a href="/app/form/create">
+	<a href="/app/form/create" data-sveltekit-preload-data="off">
 		<Button><Plus class="mr-2" size={16} />Tambah</Button>
 	</a>
 </Headers>
 {#await data.listForm}
-	Loading...
+	<Loading />
 {:then listForm}
 	{#if listForm.length === 0}
 		<EmptyForm />
 	{/if}
-	<div class="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+	<div in:fade class="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
 		{#each listForm as dataForm}
 			<a
 				class="w-full group bg-background rounded-sm transition-all border border-foreground/10 hover:border-foreground/30 active:scale-95 active:opacity-50"
 				href={`/app/form/${dataForm.id}`}
 			>
-				<div
-					class="flex justify-center items-center h-20 text-foreground font-medium md:text-base text-sm p-4"
-				>
+				<div class="flex items-center h-20 text-foreground font-medium md:text-base text-sm p-4">
 					{dataForm.title ? dataForm.title : 'Untitled'}
 				</div>
 				<div
@@ -47,7 +47,11 @@
 					<div
 						class="col-span-1 place-self-end transition-all font-medium opacity-20 group-hover:opacity-100"
 					>
-						Detail
+						{#if dataForm.isPublished}
+							<span class="inline-flex gap-1 items-center">Published</span>
+						{:else}
+							<span class="inline-flex gap-1 items-center">Draft</span>
+						{/if}
 					</div>
 				</div>
 			</a>

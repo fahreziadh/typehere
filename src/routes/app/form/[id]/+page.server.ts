@@ -94,10 +94,7 @@ export const actions = {
 				order: sql`${formContent.order}-1`
 			})
 			.where(
-				and(
-					eq(formContent.formId, formId ?? ''),
-					gte(formContent.order, parseInt(order ?? '1'))
-				)
+				and(eq(formContent.formId, formId ?? ''), gte(formContent.order, parseInt(order ?? '1')))
 			);
 	},
 	updateContent: async ({ request }) => {
@@ -109,6 +106,31 @@ export const actions = {
 			.update(formContent)
 			.set({
 				content: content ?? ''
+			})
+			.where(eq(formContent.id, id ?? ''));
+	},
+	togglePublished: async ({ request }) => {
+		const data = await request.formData();
+		const id = data.get('id')?.toString();
+		const isPublished = data.get('isPublished')?.toString() === 'true';
+
+		await db
+			.update(form)
+			.set({
+				isPublished: isPublished
+			})
+			.where(eq(form.id, id ?? ''));
+	},
+	toggleContentOptional: async ({ request }) => {
+		const data = await request.formData();
+		const id = data.get('id')?.toString();
+		const isOptional = data.get('isOptional')?.toString() === 'true';
+
+		await db
+			.update(formContent)
+			.set({
+				isOptional: isOptional,
+				updatedAt: sql`CURRENT_TIMESTAMP`
 			})
 			.where(eq(formContent.id, id ?? ''));
 	}
