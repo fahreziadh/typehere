@@ -34,5 +34,5 @@
 		</a>
 	</div>
 
-	<img src="/screenshot.webp" alt="Hero" class="w-full mt-20" />
+	<img src="/screenshot.webp" alt="Hero" class="w-full mt-20" width="1440" height="1117"																							/>
 </div>

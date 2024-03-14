@@ -10,7 +10,7 @@
 <div class="bg-background border-b mb-4">
 	<div class="flex justify-between items-center h-20 container max-w-[900px]">
 		<a href="/" class="hover:scale-95 transition-all active:opacity-50">
-			<img src="/logo.webp" alt="Logo" class="w-[114px] h-[43px]" />
+			<img src="/logo.webp" alt="Logo" class="w-[114px] h-[43px]" width="144" height="43"/>
 		</a>
 		<div>
 			{#if isSignedIn}
