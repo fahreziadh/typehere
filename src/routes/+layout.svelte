@@ -7,6 +7,11 @@
 	import '../app.css';
 </script>
 
+<svelte:head>
+	<title>Typehere - Open source form builder & survey</title>
+	<meta name="description" content="Open source Super clean & simple Form building & Survey 🍕" />
+	<meta name="keywords" content="Form, Survey, Builder, Typeform, Google Form" />
+</svelte:head>
 <div
 	class={cn(
 		' h-1 bg-primary fixed top-0 left-0 transition-all duration-1000 ease-out',
