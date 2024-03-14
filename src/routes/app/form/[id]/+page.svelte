@@ -78,7 +78,7 @@
 				type="text"
 				bind:value={title}
 				placeholder="Ketik judul form/survey...."
-				class="bg-transparent border-none outline-none text-3xl font-bold"
+				class="bg-transparent border-none outline-none text-2xl md:text-3xl font-bold"
 			/>
 		</div>
 

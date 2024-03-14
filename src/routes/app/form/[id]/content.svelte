@@ -10,7 +10,7 @@
 	import { scale, slide } from 'svelte/transition';
 
 	export let data: (typeof formContent.$inferSelect)[] | null = null;
-	export let formId = ''
+	export let formId = '';
 	$: listContent =
 		data?.map((item) => {
 			const content = JSON.parse(item.content as string) as {
@@ -34,7 +34,7 @@
 
 	async function addMoreContent(order: number) {
 		if (!formId) {
-			return alert("No form ID");
+			return alert('No form ID');
 		}
 		status = 'loading';
 		const formData = new FormData();
@@ -135,7 +135,7 @@
 </script>
 
 <div
-	class="rounded-md relative aspect-[16/9] p-4 md:p-8 border border-border mt-8 mb-4 shadow-sm flex flex-col justify-center"
+	class="rounded-md relative aspect-[16/14] md:aspect-[16/10] lg:aspect-[16/9] p-4 md:p-8 border border-border mt-8 mb-4 shadow-sm flex flex-col justify-center"
 >
 	{#if !selectedContent}
 		<h1 class="mb-4 text-2xl">Tidak ada pertanyaan</h1>
@@ -149,7 +149,7 @@
 		>
 	{/if}
 	{#if selectedContent}
-		<h1 class="text-3xl font-medium opacity-30 absolute top-5 left-5">
+		<h1 class="text-xl lg:text-2xl xl:text-3xl font-medium opacity-30 absolute top-5 left-5">
 			#{selectedContent?.order}
 		</h1>
 		<h1 class="text-3xl font-medium absolute bottom-5 left-5">
@@ -165,14 +165,14 @@
 		</h1>
 
 		<textarea
-		spellcheck="false"
+			spellcheck="false"
 			bind:value={selectedContent.content.title}
 			name="title"
 			placeholder="Tulis pertanyaan kamu disini..."
-			class="bg-transparent border-none outline-none text-2xl font-bold h-[60px] min-h-[40px] scrollbar-thin scrollbar-webkit"
+			class="bg-transparent border-none outline-none text-base md:text-lg lg:text-xl xl:text-2xl font-bold h-[40px] lg:h-[60px] min-h-[40px] scrollbar-thin scrollbar-webkit"
 		/>
 		{#if selectedContent.content.description}
-		<label transition:slide for="description" class="opacity-50 text-sm">Deskripsi</label>
+			<label transition:slide for="description" class="opacity-50 text-xs md:text-sm">Deskripsi</label>
 		{/if}
 		<input
 			type="text"
@@ -180,7 +180,7 @@
 			bind:value={selectedContent.content.description}
 			name="description"
 			placeholder="Tambahkan deskripsi (optional)"
-			class="bg-transparent border-none outline-none opacity-80 text-xl font-medium"
+			class="bg-transparent border-none outline-none opacity-80 text-sm md:text-xl font-medium"
 		/>
 
 		{#if isDirty}
@@ -222,7 +222,8 @@
 				<div
 					class="absolute top-2 left-2 w-[20px] flex items-center justify-center text-sm text-foreground/30 select-none font-medium"
 				>
-					<Hash size={16} /> {content.order}
+					<Hash size={16} />
+					{content.order}
 				</div>
 				<Button
 					type="button"
