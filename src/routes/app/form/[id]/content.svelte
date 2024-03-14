@@ -165,6 +165,7 @@
 		</h1>
 
 		<textarea
+		spellcheck="false"
 			bind:value={selectedContent.content.title}
 			name="title"
 			placeholder="Tulis pertanyaan kamu disini..."
@@ -175,6 +176,7 @@
 		{/if}
 		<input
 			type="text"
+			spellcheck="false"
 			bind:value={selectedContent.content.description}
 			name="description"
 			placeholder="Tambahkan deskripsi (optional)"

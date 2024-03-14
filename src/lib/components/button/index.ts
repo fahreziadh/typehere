@@ -7,19 +7,20 @@ const buttonVariants = tv({
 	variants: {
 		variant: {
 			default: "bg-background text-foreground border border-foreground hover:bg-foreground hover:text-background",
+			solid: "bg-foreground text-background border border-foreground hover:bg-background hover:text-foreground",
 			destructive: "bg-red-500/20 text-red-500 border border-red-500/20 hover:opacity-50",
 			outline:
-				"border border-input bg-background hover:bg-accent hover:text-accent-foreground",
+				"border border-input bg-background hover:bg-foreground hover:text-background",
 			secondary: "bg-secondary text-secondary-foreground border hover:opacity-80",
-			ghost: "hover:bg-accent hover:text-accent-foreground",
+			ghost: "hover:bg-secondary hover:text-accent-foreground",
 			link: "text-primary underline-offset-4 hover:underline",
 		},
 		size: {
 			default: "h-8 px-3 py-2",
-			sm: "h-7 px-1 text-xs",
-			lg: "h-11 px-8",
+			sm: "h-7 px-2 text-xs",
+			lg: "h-11 px-8 text-base font-semibold border-2",
 			icon: "h-8 w-8",
-			"icon-lg": "h-11 w-11",
+			"icon-lg": "h-11 w-11 border-2",
 			"icon-sm": "h-7 w-7 text-xs",
 		},
 	},
