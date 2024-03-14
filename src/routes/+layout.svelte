@@ -11,6 +11,7 @@
 	<title>Typehere - Open source form builder & survey</title>
 	<meta name="description" content="Open source Super clean & simple Form building & Survey 🍕" />
 	<meta name="keywords" content="Form, Survey, Builder, Typeform, Google Form" />
+  <meta property="twitter:url" content={"https://typehere.fun/screenshot.webp"} />
 </svelte:head>
 <div
 	class={cn(
