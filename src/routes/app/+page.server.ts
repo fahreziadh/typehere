@@ -6,7 +6,7 @@ export const load = (async (event) => {
 	const userId = session?.user?.id;
 
 	return {
-		listForm: data.getAllFormByUserId(userId),
+		listForm: data.getAllFormByUserId(userId)
 	};
 }) satisfies PageServerLoad;
 
@@ -17,7 +17,9 @@ const data = {
 		return await db.query.form.findMany({
 			where(fields, { eq }) {
 				return eq(fields.authorId, userId ?? '');
-			}
+			},
+			limit: 18,
+			offset: 0
 		});
-	},
+	}
 };
