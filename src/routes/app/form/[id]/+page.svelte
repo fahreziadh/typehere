@@ -5,7 +5,7 @@
 	import { type ActionResult } from '@sveltejs/kit';
 	import { invalidateAll } from '$app/navigation';
 	import { applyAction, deserialize } from '$app/forms';
-	import { CheckCheck } from 'lucide-svelte';
+	import { CheckCheck, Trash } from 'lucide-svelte';
 	import Content from './content.svelte';
 	import { slide } from 'svelte/transition';
 
@@ -48,28 +48,27 @@
 
 <form method="POST" on:submit|preventDefault={handleSubmit}>
 	<div class="mt-5 mb-10 flex justify-between items-center">
-		<div>
-			<a href="/app" class="mr-2"> <Button variant="secondary">Kembali</Button></a> Detail Form
+		<div class="flex items-center gap-2">
+				<a href="/app" class="mr-2"> <Button variant="secondary">Kembali</Button></a> Detail Form
 		</div>
-		<Button variant="default" type="submit" disabled={status !== 'idle' || !isDirty}>
-			{#if status === 'loading'}
-				Loading...
-			{:else if status === 'saved'}
-				Tersimpan <CheckCheck class="ml-2" size={16} />
-			{:else}
-				Simpan
-			{/if}
-		</Button>
+		<div class="flex items-center gap-4">
+			<Button variant="default" type="submit" disabled={status !== 'idle' || !isDirty}>
+				{#if status === 'loading'}
+					Loading...
+				{:else if status === 'saved'}
+					Tersimpan <CheckCheck class="ml-2" size={16} />
+				{:else}
+					Simpan
+				{/if}
+			</Button>
+		</div>
 	</div>
 	{#await data.form}
 		<p>Loading...</p>
 	{:then formData}
 		<div class="flex flex-col">
 			{#if title?.length}
-				<label
-					transition:slide={{ axis: 'y' }}
-					for="title"
-					class={cn('text-sm w-max opacity-70')}
+				<label transition:slide={{ axis: 'y' }} for="title" class={cn('text-sm w-max opacity-70')}
 					>Judul</label
 				>
 			{/if}
@@ -82,7 +81,7 @@
 			/>
 		</div>
 
-		<Content data={formData?.contents} formId={formData?.id}/>
+		<Content data={formData?.contents} formId={formData?.id} />
 
 		<!-- <div class="flex items-center flex-row justify-center gap-2 mt-4">
 			<Button variant="outline">Prev</Button>
