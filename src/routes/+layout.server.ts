@@ -1,6 +1,6 @@
 import dayjs from 'dayjs';
 import type { LayoutServerLoad } from './$types';
-import { GITHUB_TOKEN } from "$env/static/private"
+import { GITHUB_TOKEN, ENVIRONMENT } from "$env/static/private"
 
 export const load: LayoutServerLoad = async ({ locals, platform }) => {
   let githubStar = 0;
@@ -40,7 +40,7 @@ async function fetchAndStoreGithubStar(platform: Readonly<App.Platform> | undefi
 }
 
 async function getGithubStar() {
-  if (!GITHUB_TOKEN) {
+  if (!GITHUB_TOKEN || ENVIRONMENT !== 'production') {
     return 0;
   }
 
