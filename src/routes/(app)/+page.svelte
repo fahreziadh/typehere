@@ -1,16 +1,18 @@
-<script>
+<script lang="ts">
 	import { Button } from '$lib/components/button';
 	import { Github, Rocket } from 'lucide-svelte';
 	import { slide } from 'svelte/transition';
 	import { onMount } from 'svelte';
-
+	import type { LayoutData } from './$types';
+	export let data: LayoutData;
 	let ready = false;
+	let githubStar = data?.githubStar;
 	onMount(() => (ready = true));
 </script>
 
 <div class="flex flex-col items-center mt-16">
 	<a href="https://github.com/fahreziadh/typehere">
-		<Button size="sm" variant="secondary">Open source <Github size={14} class="ml-2" /></Button>
+		<Button size="sm" variant="secondary"><Github size={14} class="mr-2" /> {githubStar}</Button>
 	</a>
 	{#if ready}
 		<div
@@ -34,5 +36,5 @@
 		</a>
 	</div>
 
-	<img src="/screenshot.webp" alt="Hero" class="w-full mt-20" width="1440" height="1117"																							/>
+	<img src="/screenshot.webp" alt="Hero" class="w-full mt-20" width="1440" height="1117" />
 </div>
