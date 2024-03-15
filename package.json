@@ -11,7 +11,8 @@
     "lint": "prettier --check . && eslint .",
     "format": "prettier --write .",
     "db:push": "bun drizzle-kit push:sqlite",
-    "db:studio": "bun drizzle-kit studio"
+    "db:studio": "bun drizzle-kit studio",
+    "pages:dev": "bun run build && bun wrangler pages dev .svelte-kit/cloudflare"
   },
   "devDependencies": {
     "@sveltejs/adapter-cloudflare": "^4.1.0",
