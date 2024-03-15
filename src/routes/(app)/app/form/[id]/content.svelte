@@ -186,7 +186,7 @@
 		<h1 class="text-xl lg:text-2xl xl:text-3xl font-medium opacity-30 absolute top-5 left-5">
 			#{selectedContent?.order}
 		</h1>
-		<div class="flex flex-row absolute bottom-5 right-5 gap-4">
+		<div class="flex flex-row absolute bottom-5 right-5 gap-3">
 			<SelectCategory />
 			<Button
 				type="button"
