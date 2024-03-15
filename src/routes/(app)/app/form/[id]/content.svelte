@@ -169,7 +169,7 @@
 
 <div
 	in:fade={{ easing: sineOut, duration: 500 }}
-	class="rounded-md relative aspect-[16/14] md:aspect-[16/10] lg:aspect-[16/9] p-4 md:p-8 border border-border mb-4 shadow-sm flex flex-col justify-center"
+	class="rounded-md relative aspect-[16/14] md:aspect-[16/10] lg:aspect-[16/9] p-4 md:p-8 border border-border mb-4 flex flex-col justify-center"
 >
 	{#if !selectedContent}
 		<h1 class="mb-4 text-2xl">Tidak ada pertanyaan</h1>
@@ -186,8 +186,8 @@
 		<h1 class="text-xl lg:text-2xl xl:text-3xl font-medium opacity-30 absolute top-5 left-5">
 			#{selectedContent?.order}
 		</h1>
+		<SelectCategory class="absolute bottom-5 left-5"/>
 		<div class="flex flex-row absolute bottom-5 right-5 gap-3">
-			<SelectCategory />
 			<Button
 				type="button"
 				variant={selectedContent.isOptional ? 'solid' : 'secondary'}
@@ -217,7 +217,7 @@
 			bind:value={selectedContent.content.title}
 			name="title"
 			placeholder="Tulis pertanyaan kamu disini..."
-			class="bg-transparent border-none outline-none text-base md:text-lg lg:text-xl xl:text-2xl font-bold h-[40px] lg:h-[60px] min-h-[40px] scrollbar-thin scrollbar-webkit"
+			class="bg-transparent border-none outline-none text-base md:text-lg lg:text-xl xl:text-2xl font-bold h-[40px] lg:h-[60px] min-h-[40px]"
 		/>
 		{#if selectedContent.content.description}
 			<label transition:slide for="description" class="opacity-50 text-xs md:text-sm"
@@ -247,7 +247,7 @@
 		{/if}
 	{/if}
 </div>
-<div class="w-full overflow-x-auto flex flex-row scrollbar-thin scrollbar-webkit pb-4 pt-2">
+<div class="w-full overflow-x-auto flex flex-row scrollbar-thin scrollbar-track-secondary scrollbar-thumb-rounded-full scrollbar-thumb-foreground/10 pb-4 pt-2">
 	{#each listContent as content, index (content.id)}
 		<div
 			transition:scale
@@ -258,8 +258,8 @@
 				type="button"
 				on:click={() => selectContent(content.id)}
 				class={cn(
-					'aspect-[16/9] hover:border-foreground/30 cursor-pointer min-w-[200px] max-w-[200px] active:scale-95 transition-transform border rounded-md relative',
-					content.id === selectedContent?.id ? 'border-foreground' : 'border-border'
+					'aspect-[16/9] hover:border-foreground/30 cursor-pointer min-w-[200px] max-w-[200px] active:scale-95 transition-transform border  rounded-md relative',
+					content.id === selectedContent?.id ? 'border-foreground' : 'border-border  opacity-50'
 				)}
 			>
 				<div class="p-4 text-left font-semibold">

@@ -1,22 +1,56 @@
 <script lang="ts">
 	import Button from '$lib/components/ui/button/button.svelte';
 	import Label from '$lib/components/ui/label/label.svelte';
-	import {Popover, PopoverTrigger, PopoverContent} from '$lib/components/ui/popover';
+	import { Popover, PopoverTrigger, PopoverContent } from '$lib/components/ui/popover';
+	import { cn } from '$lib/utils';
 	import { AtSign, Text } from 'lucide-svelte';
+
+	let className = '';
+
+	export { className as class };
+
+	const listCategory = [
+		{
+			type: 'text',
+			icon: Text,
+			label: 'Text'
+		},
+		{
+			type: 'identity',
+			icon: AtSign,
+			label: 'Identitas (Email + Nama)'
+		}
+	];
+
+	export let selected = ''
+	$: selectedObject = listCategory.find((e) => e.type === selected);
 </script>
 
 <div>
 	<Popover>
 		<PopoverTrigger asChild let:builder>
-			<Button builders={[builder]}>Text</Button>
+			<Button builders={[builder]} class={cn(className)}>
+				{#if selectedObject}
+					<svelte:component this={selectedObject?.icon} size={16} class="mr-2" />
+					{selectedObject?.label}
+				{:else}
+					Pilih kategori
+				{/if}
+			</Button>
 		</PopoverTrigger>
 		<PopoverContent>
 			<div class="flex flex-col">
 				<Label class="p-3">Pilih kategori</Label>
-				<Button variant="ghost" class="justify-start"><Text size={16} class="mr-2" /> Text</Button>
-				<Button variant="ghost" class="justify-start"
-					><AtSign class="mr-2" size={16} /> Identitas {`(Email + Nama)`}</Button
-				>
+				{#each listCategory as category}
+					<Button variant={
+						selected === category.type
+							? 'solid'
+							: 'ghost'
+					} class="justify-start" on:click={() => (selected = category.type)}>
+						<svelte:component this={category.icon} size={16} class="mr-2" />
+						{category.label}</Button
+					>
+				{/each}
 			</div>
 		</PopoverContent>
 	</Popover>
