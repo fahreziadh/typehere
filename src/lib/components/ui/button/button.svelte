@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { Button as ButtonPrimitive } from "bits-ui";
 	import { cn } from "$lib/utils";
 	import { buttonVariants, type Props, type Events } from "./index.js";
 
@@ -9,12 +8,10 @@
 	let className: $$Props["class"] = undefined;
 	export let variant: $$Props["variant"] = "default";
 	export let size: $$Props["size"] = "default";
-	export let builders: $$Props["builders"] = [];
 	export { className as class };
 </script>
 
-<ButtonPrimitive.Root
-	{builders}
+<button
 	class={cn(buttonVariants({ variant, size, className }))}
 	type="button"
 	{...$$restProps}
@@ -22,4 +19,4 @@
 	on:keydown
 >
 	<slot />
-</ButtonPrimitive.Root>
+</button>

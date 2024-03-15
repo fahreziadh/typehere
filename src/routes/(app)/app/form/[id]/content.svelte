@@ -9,7 +9,7 @@
 	import { onMount } from 'svelte';
 	import { sineOut } from 'svelte/easing';
 	import { fade, scale, slide } from 'svelte/transition';
-	import SelectCategory from './select-category.svelte';
+	import Select from './select.svelte';
 
 	export let data: (typeof formContent.$inferSelect)[] | null = null;
 	export let formId = '';
@@ -185,8 +185,17 @@
 	{#if selectedContent}
 		<h1 class="text-xl lg:text-2xl xl:text-3xl font-medium opacity-30 absolute top-5 left-5">
 			#{selectedContent?.order}
-		</h1>
-		<SelectCategory class="absolute bottom-5 left-5"/>
+		</h1><script>
+			import Button from '$lib/components/ui/button/button.svelte';
+			import tippy from 'tippy.js';
+			import 'tippy.js/dist/tippy.css';
+			import 'tippy.js/animations/scale.css';
+			tippy('#myButton', {
+				content: 'My tooltip!'
+			});
+		</script>
+
+		<Select />
 		<div class="flex flex-row absolute bottom-5 right-5 gap-3">
 			<Button
 				type="button"

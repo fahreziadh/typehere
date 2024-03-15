@@ -1,7 +1,6 @@
 <script>
 	import { Button } from '$lib/components/ui/button';
 	import { Copy } from 'lucide-svelte';
-	import { toast } from 'svelte-sonner';
 	import { fade } from 'svelte/transition';
 	import { circOut } from 'svelte/easing';
 
@@ -21,7 +20,7 @@
 			<Button
 				on:click={() => {
 					navigator.clipboard.writeText(`https://typehere.fun/${formId}`);
-					toast.success('Link berhasil disalin');
+					// toast.success('Link berhasil disalin');
 				}}
 				variant="outline"
 				class="ml-4"

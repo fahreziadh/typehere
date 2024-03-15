@@ -1,7 +1,6 @@
 <script lang="ts">
 	import {Button} from '$lib/components/ui/button/index';
 	import { Copy } from 'lucide-svelte';
-	import { toast } from 'svelte-sonner';
 	import { sineInOut } from 'svelte/easing';
 	import { fade, fly } from 'svelte/transition';
 	export let formId = '';
@@ -32,7 +31,7 @@
 							<Button
 								on:click={() => {
 									navigator.clipboard.writeText(`https://typehere.fun/${formId}`);
-                  toast.success('Link berhasil disalin')
+                  // toast.success('Link berhasil disalin')
 								}}
 								variant="outline"
 								class="ml-4"
