@@ -14,7 +14,6 @@
     "db:studio": "bun drizzle-kit studio"
   },
   "devDependencies": {
-    "@sveltejs/adapter-auto": "^3.0.0",
     "@sveltejs/adapter-cloudflare": "^4.1.0",
     "@sveltejs/kit": "^2.0.0",
     "@sveltejs/vite-plugin-svelte": "^3.0.0",
@@ -42,6 +41,8 @@
     "@auth/drizzle-adapter": "^0.8.0",
     "@auth/sveltekit": "^0.14.0",
     "@libsql/client": "^0.5.5",
+    "@types/animejs": "^3.1.12",
+    "animejs": "^3.2.2",
     "clsx": "^2.1.0",
     "drizzle-orm": "^0.30.1",
     "lucide-svelte": "^0.356.0",

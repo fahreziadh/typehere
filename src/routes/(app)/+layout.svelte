@@ -1,8 +1,10 @@
 <script lang="ts">
 	import { navigating } from '$app/stores';
+	import Footer from '$lib/components/footer.svelte';
+	import Navbar from '$lib/components/navbar.svelte';
 	import { cn } from '$lib/utils';
+	import { Toaster } from 'svelte-sonner';
 
-	import '../app.css';
 </script>
 
 <svelte:head>
@@ -14,11 +16,15 @@
   <meta property="og:url" content={"https://typehere.fun/screenshot.webp"} />
   <meta property="twitter:url" content={"https://typehere.fun/screenshot.webp"} />
 </svelte:head>
-
+<Toaster position="bottom-center"/>
 <div
 	class={cn(
 		' h-1 bg-primary fixed top-0 left-0 transition-all duration-1000 ease-out',
 		$navigating ? 'w-full' : 'w-0'
 	)}
 ></div>
-<slot />
+<Navbar />
+<div class="container max-w-[900px] min-h-[70vh] antialiased bg-background text-foreground">
+	<slot />
+</div>
+<Footer />
