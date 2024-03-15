@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { applyAction, deserialize } from '$app/forms';
 	import { invalidateAll } from '$app/navigation';
-	import { Button } from '$lib/components/ui/button/index';
+	import { Button } from '$lib/components/ui/button';
 	import type { formContent } from '$lib/db/schemas';
 	import { cn } from '$lib/utils';
 	import type { ActionResult } from '@sveltejs/kit';
@@ -185,15 +185,7 @@
 	{#if selectedContent}
 		<h1 class="text-xl lg:text-2xl xl:text-3xl font-medium opacity-30 absolute top-5 left-5">
 			#{selectedContent?.order}
-		</h1><script>
-			import Button from '$lib/components/ui/button/button.svelte';
-			import tippy from 'tippy.js';
-			import 'tippy.js/dist/tippy.css';
-			import 'tippy.js/animations/scale.css';
-			tippy('#myButton', {
-				content: 'My tooltip!'
-			});
-		</script>
+		</h1>
 
 		<Select />
 		<div class="flex flex-row absolute bottom-5 right-5 gap-3">
