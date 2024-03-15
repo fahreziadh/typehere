@@ -17,7 +17,7 @@ export const load: LayoutServerLoad = async ({ locals, platform }) => {
 				JSON.stringify({
 					c: githubStar,
 					r: 60 * 60, // 1 hour
-					lr: new Date().toISOString()
+					lr: Date.now()
 				})
 			);
 		} else {
