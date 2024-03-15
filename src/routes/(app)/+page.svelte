@@ -12,7 +12,7 @@
 
 <div class="flex flex-col items-center mt-16">
 	<a href="https://github.com/fahreziadh/typehere">
-		<Button variant="default">
+		<Button variant="secondary">
 			<img width={18} height="18" src="/github.png" alt="github" class="mr-2" />
 			Star {githubStar}
 		</Button
