@@ -1,6 +1,7 @@
 import { relations, sql } from 'drizzle-orm';
 import { index, integer, sqliteTable, text } from 'drizzle-orm/sqlite-core';
 import { form } from './form';
+import { formAnswer } from './form-answer';
 
 export const formContent = sqliteTable(
 	'form_content',
@@ -25,10 +26,11 @@ export const formContent = sqliteTable(
 	}
 );
 
-export const formContentRelation = relations(formContent, ({ one }) => ({
+export const formContentRelation = relations(formContent, ({ one,many }) => ({
 	form: one(form, {
 		fields: [formContent.formId],
 		references: [form.id],
 		relationName: 'form'
-	})
+	}),
+	answers: many(formAnswer)
 }));

@@ -1,1 +1,3 @@
-<slot />
+<div class="bg-background">
+  <slot />
+</div>
