@@ -5,11 +5,23 @@
 	import type { formContent } from '$lib/db/schemas';
 	import { cn } from '$lib/utils';
 	import type { ActionResult } from '@sveltejs/kit';
-	import { CheckCircle2, Circle, Hash, Plus, Trash } from 'lucide-svelte';
+	import {
+		AtSign,
+		CheckCircle2,
+		Circle,
+		Hash,
+		Plus,
+		Trash,
+		UserSquare2Icon,
+		Text,
+
+		Hand
+
+	} from 'lucide-svelte';
 	import { onMount } from 'svelte';
 	import { sineOut } from 'svelte/easing';
 	import { fade, scale, slide } from 'svelte/transition';
-	import Select from './select.svelte';
+	import Select from '$lib/components/ui/select.svelte';
 
 	export let data: (typeof formContent.$inferSelect)[] | null = null;
 	export let formId = '';
@@ -46,7 +58,7 @@
 		formData.append('formId', formId);
 		formData.append('id', id);
 		formData.append('order', order.toString());
-		formData.append('content', JSON.stringify({ title: '', type: 'short-text', description: '' }));
+		formData.append('content', JSON.stringify({ title: '', type: 'text', description: '' }));
 
 		const response = await fetch(`/app/form/${formId}?/addMoreContent`, {
 			method: 'POST',
@@ -187,7 +199,21 @@
 			#{selectedContent?.order}
 		</h1>
 
-		<Select />
+		<Select
+			bind:selected={selectedContent.content.type}
+			placeholder="Pilih jenis pertanyaan"
+			class="absolute bottom-5 left-5"
+			options={[
+				// @ts-expect-error
+				{ value: 'greetings', label: 'Intro', icon: Hand },
+				// @ts-expect-error
+				{ value: 'text', label: 'Text', icon: Text },
+				// @ts-expect-error
+				{ value: 'email', label: 'Email', icon: AtSign },
+				// @ts-expect-error
+				{ value: 'name', label: 'Nama lengkap', icon: UserSquare2Icon }
+			]}
+		/>
 		<div class="flex flex-row absolute bottom-5 right-5 gap-3">
 			<Button
 				type="button"
@@ -248,7 +274,9 @@
 		{/if}
 	{/if}
 </div>
-<div class="w-full overflow-x-auto flex flex-row scrollbar-thin scrollbar-track-secondary scrollbar-thumb-rounded-full scrollbar-thumb-foreground/10 pb-4 pt-2">
+<div
+	class="w-full overflow-x-auto flex flex-row scrollbar-thin scrollbar-track-secondary scrollbar-thumb-rounded-full scrollbar-thumb-foreground/10 pb-4 pt-2"
+>
 	{#each listContent as content, index (content.id)}
 		<div
 			transition:scale

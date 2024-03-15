@@ -18,7 +18,15 @@ export const load = (async (event) => {
 			id: crypto.randomUUID(),
 			formId: id,
 			order: 1,
-			content: JSON.stringify({ title: '', type: 'identity', description: '', email: true, fullname: true })
+			content: JSON.stringify({ title: 'Halo, selamat datang!', type: 'greetings', description: ''})
 		});
 	return redirect(303, `/app/form/${id}`);
 }) satisfies PageServerLoad;
+
+/*
+	Type :
+	- greetings
+	- text
+	- email
+	- name
+*/
