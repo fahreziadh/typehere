@@ -3,7 +3,7 @@
 	import Label from '$lib/components/ui/label/label.svelte';
 	import { Popover, PopoverTrigger, PopoverContent } from '$lib/components/ui/popover';
 	import { cn } from '$lib/utils';
-	import { AtSign, Text } from 'lucide-svelte';
+	import { AtSign, Text, UserCircle2Icon } from 'lucide-svelte';
 
 	let className = '';
 
@@ -16,9 +16,14 @@
 			label: 'Text'
 		},
 		{
-			type: 'identity',
+			type: 'email',
 			icon: AtSign,
-			label: 'Identitas (Email + Nama)'
+			label: 'Email'
+		},
+		{
+			type: 'fullname',
+			icon: UserCircle2Icon,
+			label: 'Nama Lengkap'
 		}
 	];
 
