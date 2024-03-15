@@ -1,5 +1,5 @@
 <script>
-	import { Button } from '$lib/components/button';
+	import { Button } from '$lib/components/ui/button';
 	import { Copy } from 'lucide-svelte';
 	import { toast } from 'svelte-sonner';
 	import { fade } from 'svelte/transition';

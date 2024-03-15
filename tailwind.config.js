@@ -1,12 +1,18 @@
+import { fontFamily } from "tailwindcss/defaultTheme";
+
 /** @type {import('tailwindcss').Config} */
 export default {
 	darkMode: 'class',
 	content: ['./src/**/*.{html,js,svelte,ts}'],
+  safelist: ["dark"],
 	theme: {
 		extend: {
 			container: {
 				center: true,
-				padding: '1rem'
+				padding: '1rem',
+				screens: {
+					"2xl": "1400px"
+				}
 			},
 			colors: {
 				background: 'hsl(var(--background))',
@@ -23,6 +29,10 @@ export default {
 					DEFAULT: 'hsl(var(--card))',
 					foreground: 'hsl(var(--card-foreground))'
 				},
+				popover: {
+					DEFAULT: "hsl(var(--popover) / <alpha-value>)",
+					foreground: "hsl(var(--popover-foreground) / <alpha-value>)"
+				},
 				border: 'hsl(var(--border))',
 				input: 'hsl(var(--input))',
 				ring: 'hsl(var(--ring))'
@@ -31,6 +41,9 @@ export default {
 				lg: 'var(--radius)',
 				md: 'calc(var(--radius) - 2px)',
 				sm: 'calc(var(--radius) - 4px)'
+			},
+			fontFamily: {
+				sans: [...fontFamily.sans]
 			}
 		}
 	},

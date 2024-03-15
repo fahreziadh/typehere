@@ -2,7 +2,7 @@
 	import { SignIn, SignOut } from '@auth/sveltekit/components';
 	import { signIn, signOut } from '@auth/sveltekit/client';
 	import { page } from '$app/stores';
-	import { Button } from './button';
+	import { Button } from './ui/button';
 
 	$: isSignedIn = $page.data.session?.user;
 </script>

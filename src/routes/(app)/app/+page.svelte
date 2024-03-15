@@ -2,7 +2,7 @@
 	import { CircleUserRound, MessageCircleQuestion, Plus } from 'lucide-svelte';
 	import type { PageData } from './$types';
 	import Headers from '$lib/components/headers.svelte';
-	import { Button } from '$lib/components/button';
+	import { Button } from '$lib/components/ui/button';
 	import EmptyForm from './empty-form.svelte';
 	import Loading from './loading.svelte';
 	import { fade } from 'svelte/transition';

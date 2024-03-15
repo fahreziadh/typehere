@@ -2,36 +2,39 @@
 @tailwind components;
 @tailwind utilities;
 
-
 @layer base {
   :root {
     --background: 0 0% 100%;
     --foreground: 240 6% 15%;
+
+    --muted: 240 4.8% 95.9%;
+    --muted-foreground: 240 3.8% 46.1%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 240 10% 3.9%;
+
     --card: 0 0% 100%;
     --card-foreground: 240 10% 3.9%;
-    --primary: 350 89% 60%;
-    --primary-foreground: 355.7 100% 97.3%;
-    --secondary: 240 5% 96%;
-    --secondary-foreground: 240 5% 26%;
+
     --border: 240 6% 90%;
     --input: 240 5.9% 90%;
     --ring: 346.8 77.2% 49.8%;
-    --radius: 0.75rem;
-  }
 
-  .dark {
-    --background: 20 14.3% 4.1%;
-    --foreground: 240 5% 96%;
-    --card: 20 14.3% 6%;
-    --card-foreground: 0 0% 95%;
     --primary: 350 89% 60%;
     --primary-foreground: 355.7 100% 97.3%;
-    --secondary: 20 14.3% 6%;
-    --secondary-foreground: 0 0% 98%;
-    --border: 20 14.3% 6%;
-    --input: 20 14.3% 6%;
-    --ring: 346.8 77.2% 49.8%;
+
+    --secondary: 240 5% 96%;
+    --secondary-foreground: 240 5% 26%;
+
+    --accent: 240 4.8% 95.9%;
+    --accent-foreground: 240 5.9% 10%;
+
+    --destructive: 0 72.2% 50.6%;
+    --destructive-foreground: 0 0% 98%;
+
+    --radius: 0.5rem;
   }
+
 }
 
 @layer base {
@@ -42,6 +45,7 @@
     @apply bg-background text-foreground;
   }
 }
+
 
 /* Hide scrollbar for Chrome, Safari and Opera */
 .container-snap::-webkit-scrollbar {

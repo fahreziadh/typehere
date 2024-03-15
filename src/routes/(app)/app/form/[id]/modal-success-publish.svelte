@@ -1,5 +1,5 @@
 <script lang="ts">
-	import Button from '$lib/components/button/button.svelte';
+	import {Button} from '$lib/components/ui/button/index';
 	import { Copy } from 'lucide-svelte';
 	import { toast } from 'svelte-sonner';
 	import { sineInOut } from 'svelte/easing';

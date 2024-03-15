@@ -44,13 +44,14 @@
     "@libsql/client": "^0.5.5",
     "@types/animejs": "^3.1.12",
     "animejs": "^3.2.2",
+    "bits-ui": "^0.19.7",
     "clsx": "^2.1.0",
     "dayjs": "^1.11.10",
     "drizzle-orm": "^0.30.1",
-    "lucide-svelte": "^0.356.0",
+    "lucide-svelte": "^0.358.0",
     "nanoid": "^5.0.6",
     "svelte-sonner": "^0.3.19",
     "tailwind-merge": "^2.2.1",
-    "tailwind-variants": "^0.2.0"
+    "tailwind-variants": "^0.2.1"
   }
 }

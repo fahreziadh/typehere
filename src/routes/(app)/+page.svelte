@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Button } from '$lib/components/button';
+	import { Button } from '$lib/components/ui/button';
 	import { Github, Rocket } from 'lucide-svelte';
 	import { slide } from 'svelte/transition';
 	import { onMount } from 'svelte';

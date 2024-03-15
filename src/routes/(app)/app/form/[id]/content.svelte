@@ -1,14 +1,15 @@
 <script lang="ts">
 	import { applyAction, deserialize } from '$app/forms';
 	import { invalidateAll } from '$app/navigation';
-	import { Button } from '$lib/components/button';
+	import { Button } from '$lib/components/ui/button/index';
 	import type { formContent } from '$lib/db/schemas';
 	import { cn } from '$lib/utils';
 	import type { ActionResult } from '@sveltejs/kit';
 	import { CheckCircle2, Circle, Hash, Plus, Trash } from 'lucide-svelte';
 	import { onMount } from 'svelte';
-	import { circOut, sineOut } from 'svelte/easing';
-	import { fade, fly, scale, slide } from 'svelte/transition';
+	import { sineOut } from 'svelte/easing';
+	import { fade, scale, slide } from 'svelte/transition';
+	import SelectCategory from './select-category.svelte';
 
 	export let data: (typeof formContent.$inferSelect)[] | null = null;
 	export let formId = '';
@@ -186,6 +187,7 @@
 			#{selectedContent?.order}
 		</h1>
 		<div class="flex flex-row absolute bottom-5 right-5 gap-4">
+			<SelectCategory />
 			<Button
 				type="button"
 				variant={selectedContent.isOptional ? 'solid' : 'secondary'}
@@ -195,19 +197,19 @@
 				}}
 				>{#if selectedContent.isOptional}
 					<CheckCircle2 size={18} class="mr-2" />
-					{:else}
+				{:else}
 					<Circle size={18} class="mr-2" />
 				{/if} Opsional</Button
 			>
 			<Button
-			type="button"
-			size="icon"
-			variant="destructive"
-			disabled={status === 'loading'}
-			on:click={() => {
-				deleteContent(selectedContent?.id ?? '');
-			}}><Trash size={16} /></Button
-		>
+				type="button"
+				size="icon"
+				variant="destructive"
+				disabled={status === 'loading'}
+				on:click={() => {
+					deleteContent(selectedContent?.id ?? '');
+				}}><Trash size={16} /></Button
+			>
 		</div>
 
 		<textarea

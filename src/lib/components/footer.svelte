@@ -1,6 +1,6 @@
 <script>
 	import { GithubIcon, Twitter } from 'lucide-svelte';
-	import Button from './button/button.svelte';
+	import { Button } from './ui/button/index';
 </script>
 
 <div class="mt-10 border-t">
@@ -13,7 +13,9 @@
 				>
 			</a>
 			<a aria-label="github" href="https://github.com/fahreziadh/typehere" target="_blank">
-				<Button aria-label="github" size="icon" type="button" variant="outline"><GithubIcon size={18} /></Button>
+				<Button aria-label="github" size="icon" type="button" variant="outline"
+					><GithubIcon size={18} /></Button
+				>
 			</a>
 		</div>
 	</div>
