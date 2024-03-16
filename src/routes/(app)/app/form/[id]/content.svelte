@@ -90,7 +90,7 @@
 		}
 	}
 
-	async function deleteContent(id: string) {
+	async function deleteContent(id: string, order: number = 0) {
 		if (!formId) {
 			throw new Error('No form ID');
 		}
@@ -98,7 +98,7 @@
 		const formData = new FormData();
 
 		formData.append('formId', formId);
-		formData.append('order', selectedContent?.order?.toString() ?? '');
+		formData.append('order', order?.toString() ?? '');
 		formData.append('id', id);
 
 		const response = await fetch(`/app/form/${formId}?/deleteContent`, {
@@ -200,7 +200,7 @@
 		>
 	{/if}
 	{#if selectedContent}
-		<h1 class="text-xl lg:text-2xl xl:text-3xl font-medium opacity-30 absolute top-5 left-5">
+		<h1 class="text-xl lg:text-2xl font-medium opacity-30 absolute top-5 left-5">
 			#{selectedContent?.order}
 		</h1>
 		<div class="absolute bottom-5 left-5 flex flex-row items-center gap-2">
@@ -262,7 +262,7 @@
 				variant="destructive"
 				disabled={status === 'loading'}
 				on:click={() => {
-					deleteContent(selectedContent?.id ?? '');
+					deleteContent(selectedContent?.id ?? '', selectedContent?.order ?? 0);
 				}}><Trash size={16} /></Button
 			>
 		</div>
@@ -315,8 +315,8 @@
 				type="button"
 				on:click={() => selectContent(content.id)}
 				class={cn(
-					'aspect-[16/9] hover:border-foreground/30 cursor-pointer min-w-[200px] max-w-[200px] active:scale-95 transition-transform border  rounded-md relative',
-					content.id === selectedContent?.id ? 'border-foreground' : 'border-border  opacity-50'
+					'aspect-[16/9]  cursor-pointer min-w-[200px] max-w-[200px] active:opacity-80 transition-all border  rounded-md relative',
+					content.id === selectedContent?.id ? 'border-foreground' : 'border-border opacity-50 hover:border-foreground/30'
 				)}
 			>
 				<div class="p-4 text-left font-semibold">
@@ -341,7 +341,7 @@
 				<Button
 					type="button"
 					disabled={status === 'loading'}
-					on:click={() => deleteContent(content.id)}
+					on:click={() => deleteContent(content.id, content.order ?? 0)}
 					size="icon-sm"
 					variant="destructive"
 					class="absolute bottom-2 right-2 grayscale group-hover:grayscale-0 opacity-50 group-hover:opacity-100"

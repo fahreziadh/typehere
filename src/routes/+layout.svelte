@@ -2,6 +2,11 @@
 	import { navigating } from '$app/stores';
 	import { cn } from '$lib/utils';
 	import 'microtip/microtip.css';
+	import dayjs from 'dayjs';
+	import relativeTime from 'dayjs/plugin/relativeTime';
+	import utc from 'dayjs/plugin/utc';
+	dayjs.extend(relativeTime)
+	dayjs.extend(utc)
 
 	import '../app.css';
 </script>
@@ -36,7 +41,7 @@
 
 <div
 	class={cn(
-		' h-1 bg-primary fixed top-0 left-0 transition-all duration-1000 ease-out',
+		' h-1 bg-primary scroll-smooth fixed top-0 left-0 transition-all duration-1000 ease-out',
 		$navigating ? 'w-full' : 'w-0'
 	)}
 ></div>

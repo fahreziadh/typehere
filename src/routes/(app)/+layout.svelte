@@ -15,7 +15,7 @@
 	)}
 ></div>
 <Navbar />
-<div class="container max-w-[900px] min-h-[70vh] antialiased bg-background text-foreground">
+<div class="container max-w-[900px] min-h-[70vh] antialiased bg-background text-foreground scroll-smooth">
 	<slot />
 </div>
 <Footer />

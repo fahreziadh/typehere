@@ -1,10 +1,5 @@
-<script>
-
-	import { fade } from "svelte/transition";
-
-</script>
-<div in:fade class="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-4 animate-pulse">
-  {#each Array.from({ length: 12 }) as item}
+<div class="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-4 animate-pulse">
+  {#each Array.from({ length: 18 }) as item}
 	<div
 		class="w-full group bg-secondary rounded-sm border"
 	>

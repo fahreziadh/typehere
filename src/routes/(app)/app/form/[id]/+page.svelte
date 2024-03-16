@@ -4,14 +4,15 @@
 	import type { PageData } from './$types';
 	import { page } from '$app/stores';
 	import { type ActionResult } from '@sveltejs/kit';
-	import { invalidateAll, replaceState } from '$app/navigation';
+	import { goto, invalidateAll, replaceState } from '$app/navigation';
 	import { applyAction, deserialize } from '$app/forms';
 	import { ArrowLeft, BookUser, CheckCheck, Edit2Icon, Rocket, ShareIcon } from 'lucide-svelte';
 	import Content from './content.svelte';
 	import Result from './result/result.svelte';
-	import { slide } from 'svelte/transition';
+	import { fly, slide } from 'svelte/transition';
 	import ModalSuccessPublish from './modal-success-publish.svelte';
 	import Share from './share.svelte';
+	import { quintOut,} from 'svelte/easing';
 
 	export let data: PageData;
 
@@ -84,9 +85,39 @@
 		status = 'idle';
 		applyAction(result);
 	}
+
+	async function deleteForm() {
+		if (!id) {
+			return alert('No form ID');
+		}
+		status = 'loading';
+
+		const formData = new FormData();
+
+		formData.append('id', id);
+
+		const response = await fetch('?/deleteForm', {
+			method: 'POST',
+			body: formData
+		});
+
+		const result: ActionResult = deserialize(await response.text());
+
+		if (result.type === 'success') {
+			replaceState('/app', {});
+			goto('/app');
+		}
+
+		status = 'idle';
+		applyAction(result);
+	}
 </script>
 
-<form method="POST" on:submit|preventDefault={handleSubmit}>
+<form
+	in:fly={{ x: 50, easing: quintOut, opacity: 0, duration: 500 }}
+	method="POST"
+	on:submit|preventDefault={handleSubmit}
+>
 	<a href="/app" class="mt-10 w-max">
 		<Button variant="link" size="sm"><ArrowLeft size={12} class="mr-1" />Kembali</Button></a
 	>
@@ -141,22 +172,13 @@
 					size={16}
 				/>
 			</Button>
-			<Button variant="default" type="submit" disabled={status !== 'idle' || !isDirty}>
-				{#if status === 'loading'}
-					Loading...
-				{:else if status === 'saved'}
-					Tersimpan <CheckCheck class="ml-2" size={16} />
-				{:else}
-					Simpan
-				{/if}
-			</Button>
 		</div>
 	</div>
 	{#await data.form}
 		<p>Loading...</p>
 	{:then formData}
 		{#if section === 'detail'}
-			<div transition:slide={{axis: "y"}} class="flex flex-col pb-6">
+			<div transition:slide={{ axis: 'y' }} class="flex flex-col pb-6">
 				{#if title?.length}
 					<label transition:slide={{ axis: 'y' }} for="title" class={cn('text-sm w-max opacity-70')}
 						>Judul</label
@@ -169,6 +191,24 @@
 					placeholder="Ketik judul form/survey...."
 					class="bg-transparent border-none outline-none text-2xl md:text-3xl font-bold"
 				/>
+				{#if isDirty}
+					<div transition:slide>
+						<Button
+							variant="default"
+							type="submit"
+							class="w-max mt-2"
+							disabled={status !== 'idle' || !isDirty}
+						>
+							{#if status === 'loading'}
+								Loading...
+							{:else if status === 'saved'}
+								Tersimpan <CheckCheck class="ml-2" size={16} />
+							{:else}
+								Simpan
+							{/if}
+						</Button>
+					</div>
+				{/if}
 			</div>
 		{/if}
 
@@ -176,10 +216,14 @@
 			{#if section === 'detail'}
 				<Content data={formData?.contents} formId={formData?.id} />
 			{:else if section === 'result'}
-				<Result data={data}/>
+				<Result {data} />
 			{:else if section === 'share'}
 				<Share formId={id} />
 			{/if}
 		</div>
 	{/await}
 </form>
+
+<div class="mt-10 bg-secondary p-4 rounded-md">
+	<Button disabled={status==="loading"} variant="destructive" type="button" on:click={deleteForm}>Hapus Form</Button>
+</div>

@@ -1,6 +1,6 @@
 import { db } from '$lib/db/db';
 import { form, formContent } from '$lib/db/schemas';
-import { and, eq, gte, ne, sql } from 'drizzle-orm';
+import { and, eq, gt, gte, ne, sql } from 'drizzle-orm';
 import type { PageServerLoad } from './$types';
 
 export const load = (async ({ params }) => {
@@ -88,14 +88,13 @@ export const actions = {
 		}
 
 		await db.delete(formContent).where(eq(formContent.id, id ?? ''));
-
 		await db
 			.update(formContent)
 			.set({
 				order: sql`${formContent.order}-1`
 			})
 			.where(
-				and(eq(formContent.formId, formId ?? ''), gte(formContent.order, parseInt(order ?? '1')))
+				and(eq(formContent.formId, formId ?? ''), gt(formContent.order, parseInt(order ?? '1')))
 			);
 	},
 	updateContent: async ({ request }) => {
@@ -134,5 +133,12 @@ export const actions = {
 				updatedAt: sql`CURRENT_TIMESTAMP`
 			})
 			.where(eq(formContent.id, id ?? ''));
+	},
+	deleteForm: async ({ request }) => {
+		const data = await request.formData();
+		const id = data.get('id')?.toString();
+
+		await db.delete(formContent).where(eq(formContent.formId, id ?? ''));
+		await db.delete(form).where(eq(form.id, id ?? ''));
 	}
 } satisfies Actions;
