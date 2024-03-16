@@ -5,7 +5,7 @@ import type { PageServerLoad } from './$types';
 
 export const load = (async ({ params }) => {
 	return {
-		form: await data.getFormById(params.id)
+		form: await data.getFormById(params.id),
 	};
 }) satisfies PageServerLoad;
 
@@ -16,6 +16,7 @@ const data = {
 		return await db.query.form.findFirst({
 			with: {
 				contents: {
+					with:{answers: true},
 					orderBy(fields, operators) {
 						return operators.asc(fields.order);
 					}
@@ -25,7 +26,7 @@ const data = {
 				return eq(fields.id, id ?? '');
 			}
 		});
-	}
+	},
 };
 
 /* ================ACTIONS================ */

@@ -8,7 +8,7 @@
 	import { applyAction, deserialize } from '$app/forms';
 	import { ArrowLeft, BookUser, CheckCheck, Edit2Icon, Rocket, ShareIcon } from 'lucide-svelte';
 	import Content from './content.svelte';
-	import Result from './result.svelte';
+	import Result from './result/result.svelte';
 	import { slide } from 'svelte/transition';
 	import ModalSuccessPublish from './modal-success-publish.svelte';
 	import Share from './share.svelte';
@@ -176,7 +176,7 @@
 			{#if section === 'detail'}
 				<Content data={formData?.contents} formId={formData?.id} />
 			{:else if section === 'result'}
-				<Result />
+				<Result data={data}/>
 			{:else if section === 'share'}
 				<Share formId={id} />
 			{/if}
