@@ -31,7 +31,7 @@
 		<div class="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
 			{#each listForms.listForms as dataForm}
 				<a
-					data-sveltekit-preload-data="off"
+					data-sveltekit-preload-data="hover"
 					class="w-full group bg-background rounded-sm transition-all h-max border border-foreground/10 hover:border-foreground/30 active:scale-95 active:opacity-50"
 					href={`/app/form/${dataForm.id}`}
 				>
