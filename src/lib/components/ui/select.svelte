@@ -7,6 +7,7 @@
 		value: string;
 		label: string;
 		icon?: typeof SvelteComponent;
+		disable?: boolean
 	};
 
 	let className = '';
@@ -49,8 +50,9 @@
 			{#each options as option}
 				<button
 					type="button"
+					disabled={option.disable}
 					on:click={() => selectOption(option)}
-					class="w-full flex items-center transition text-sm hover:bg-secondary justify-start px-4 py-2 text-foreground/80 hover:text-foreground"
+					class="w-full flex items-center transition text-sm hover:bg-secondary justify-start px-4 py-2 text-foreground/80 hover:text-foreground disabled:opacity-50 disabled:cursor-not-allowed"
 				>
 					{#if option.icon}
 						<svelte:component this={option.icon} size={16} class="mr-2" />

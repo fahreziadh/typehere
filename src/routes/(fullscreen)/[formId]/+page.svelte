@@ -1,5 +1,5 @@
 <script lang="ts">
-	import {Button} from '$lib/components/ui/button/index';
+	import { Button } from '$lib/components/ui/button/index';
 	import { ChevronRight, ChevronLeft } from 'lucide-svelte';
 	import type { PageData } from './$types';
 	import { slide } from 'svelte/transition';
@@ -131,8 +131,7 @@
 					return {
 						formContentId: item.id,
 						answer: item.content.answer,
-						email: 'anonymous',
-						fullName: 'anonymous'
+						type: item.content.type
 					};
 				})
 			)
@@ -153,6 +152,17 @@
 
 		applyAction(result);
 	}
+
+	$: isGreetings = selectedContent.content.type === 'greetings';
+	$: isNextDisabled =
+		loading ||
+		(!selectedContent.isOptional && !selectedContent.content.answer) ||
+		(selectedContent.content.type === 'email' &&
+			!String(selectedContent.content.answer)
+				.toLowerCase()
+				.match(
+					/^[^\s@]+@[^\s@]+\.[^\s@]+$/
+				))
 </script>
 
 <svelte:head>
@@ -160,65 +170,85 @@
 	<title>Typehere - {form?.title}</title>
 </svelte:head>
 
-<div
-	id="progress"
-	class="bg-foreground text-background fixed top-0 flex items-center justify-center w-0"
->
-	<span style="opacity: 0;" id="progress-message" class="absolute">Pertanyaan terakhir</span>
-</div>
-<div
-	class="min-h-screen max-h-screen relative max-w-[100vw] overflow-hidden flex justify-center px-10 md:px-14 lg:px-16 xl:px-24 2xl:px-28 flex-col scrollbar-thin scrollbar-webkit"
->
-	<span class="text-xl opacity-50 fixed top-10 left-0 px-10 md:px-14 lg:px-16 xl:px-24 2xl:px-28"
-		>{selectedContentIndex + 1} / {listContent.length}</span
+{#if listContent.length > 0}
+	<div
+		id="progress"
+		class="bg-foreground text-background fixed top-0 flex items-center justify-center w-0"
 	>
-
-	<div id="container" class="w-full">
-		<h1 class="text-xl md:text-2xl xl:text-4xl font-medium mt-4">
-			{selectedContent.content.title ? selectedContent.content.title : 'Untitled'}
-		</h1>
-		<h1 class="text-sm md:text-base lg:text-lg opacity-50 mt-1">
-			{selectedContent.content.description ? `~ ${selectedContent.content.description}` : ''}
-			{` ${selectedContent.isOptional ? '(Opsional)' : '(Wajib diisi)'}`}
-		</h1>
-		<!-- svelte-ignore a11y-autofocus -->
-		<textarea
-			spellcheck="false"
-			id="answer"
-			autofocus={true}
-			bind:value={selectedContent.content.answer}
-			placeholder="Tulis jawaban kamu disini..."
-			class="bg-transparent mt-5 border-none outline-none w-full text-lg md:text-xl lg:text-2xl xl:text-2xl font-medium h-[100px] min-h-[40px] scrollbar-thin scrollbar-webkit"
-		/>
+		<span style="opacity: 0;" id="progress-message" class="absolute">Pertanyaan terakhir</span>
 	</div>
-	{#if selectedContentIndex < listContent.length - 1}
-		<div class="flex flex-row gap-4 items-center mt-4">
-			<Button
-				disabled={loading || (!selectedContent.isOptional && !selectedContent.content.answer)}
-				size="lg"
-				class="w-max"
-				on:click={onNextClick}>Lanjut <ChevronRight size={20} class="ml-2" /></Button
-			>
-		</div>
-	{:else if selectedContentIndex === listContent.length - 1}
-		<div class="flex flex-row gap-4 items-center mt-4">
-			<Button
-				variant={selectedContentIndex + 1 === listContent.length ? 'solid' : 'default'}
-				disabled={loading || (!selectedContent.isOptional && !selectedContent.content.answer)}
-				size="lg"
-				class="w-max"
-				on:click={onNextClick}
-			>
-				{loading ? 'Mengirim jawaban...' : 'Selesai & Kirim Jawaban'}</Button
-			>
-		</div>
-	{/if}
+	<div
+		class="min-h-screen max-h-screen relative max-w-[100vw] overflow-hidden flex justify-center px-10 md:px-14 lg:px-16 xl:px-24 2xl:px-28 flex-col scrollbar-thin scrollbar-webkit"
+	>
+		<span class="text-xl opacity-50 fixed top-10 left-0 px-10 md:px-14 lg:px-16 xl:px-24 2xl:px-28"
+			>{selectedContentIndex + 1} / {listContent.length}</span
+		>
 
-	{#if selectedContentIndex > 0}
-		<div transition:slide={{ axis: 'y', easing: sineOut }}>
-			<Button disabled={loading} class="w-max px-0 mt-2" variant="link" on:click={onPreviousClick}
-				><ChevronLeft size={16} class="mr-1" /> Kembali</Button
-			>
+		<div id="container" class="w-full">
+			<h1 class="text-xl md:text-2xl xl:text-4xl font-medium mt-4">
+				{selectedContent.content.title ? selectedContent.content.title : 'Untitled'}
+			</h1>
+			<h1 class="text-sm md:text-base lg:text-lg opacity-50 mt-1">
+				{selectedContent.content.description ? `~ ${selectedContent.content.description}` : ''}
+				{#if !isGreetings}
+					{` ${selectedContent.isOptional ? '(Opsional)' : '(Wajib diisi)'}`}
+				{/if}
+			</h1>
+			<!-- svelte-ignore a11y-autofocus -->
+			{#if selectedContent.content.type === 'text' || selectedContent.content.type === 'fullname'}
+				<textarea
+					spellcheck="false"
+					autofocus={true}
+					bind:value={selectedContent.content.answer}
+					placeholder="Tulis jawaban kamu disini..."
+					class="bg-transparent mt-5 border-none outline-none w-full text-lg md:text-xl lg:text-2xl xl:text-2xl font-medium h-[100px] min-h-[40px] scrollbar-thin scrollbar-webkit"
+				/>
+			{/if}
+
+			<!-- svelte-ignore a11y-autofocus -->
+			{#if selectedContent.content.type === 'email'}
+				<input
+					type="email"
+					autofocus={true}
+					bind:value={selectedContent.content.answer}
+					placeholder="Masukkan alamat email kamu..."
+					class="bg-transparent mt-5 border-none outline-none w-full text-lg md:text-xl lg:text-2xl xl:text-2xl font-medium h-12"
+				/>
+			{/if}
 		</div>
-	{/if}
-</div>
+		{#if selectedContentIndex < listContent.length - 1}
+			<div class="flex flex-row gap-4 items-center mt-4">
+				<Button
+					disabled={isGreetings ? false : isNextDisabled}
+					size="lg"
+					class="w-max"
+					on:click={onNextClick}>Lanjut <ChevronRight size={20} class="ml-2" /></Button
+				>
+			</div>
+		{:else if selectedContentIndex === listContent.length - 1}
+			<div class="flex flex-row gap-4 items-center mt-4">
+				<Button
+					variant={selectedContentIndex + 1 === listContent.length ? 'solid' : 'default'}
+					disabled={isNextDisabled}
+					size="lg"
+					class="w-max"
+					on:click={onNextClick}
+				>
+					{loading ? 'Mengirim jawaban...' : 'Selesai & Kirim Jawaban'}</Button
+				>
+			</div>
+		{/if}
+
+		{#if selectedContentIndex > 0}
+			<div transition:slide={{ axis: 'y', easing: sineOut }}>
+				<Button disabled={loading} class="w-max px-0 mt-2" variant="link" on:click={onPreviousClick}
+					><ChevronLeft size={16} class="mr-1" /> Kembali</Button
+				>
+			</div>
+		{/if}
+	</div>
+{:else}
+	<div class="flex items-center justify-center h-screen">
+		<p>Form tidak ditemukan</p>
+	</div>
+{/if}

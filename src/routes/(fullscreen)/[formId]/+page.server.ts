@@ -20,6 +20,7 @@ export const load = (async ({ params }) => {
 			);
 		}
 	});
+
 	return { dataForm };
 }) satisfies PageServerLoad;
 
@@ -33,15 +34,23 @@ export const actions: Actions = {
 		const answers = JSON.parse(data.get('answers')?.toString() ?? '[]') as {
 			answer: string;
 			formContentId: string;
-			email: string;
-			fullName: string;
+			type: string;
 		}[];
 
 		if (!answers || !answers.length) {
 			return;
 		}
 
-		const inputAnswers = answers.map((answer) => ({ ...answer, id: crypto.randomUUID() }));
+		const email = answers.find((answer) => answer.type === 'email')?.answer ?? '';
+		const fullName = answers.find((answer) => answer.type === 'fullname')?.answer ?? '';
+
+		const inputAnswers = answers.map((answer) => ({
+			answer: answer.answer,
+			formContentId: answer.formContentId,
+			email,
+			fullName,
+			id: crypto.randomUUID()
+		}));
 		await db.insert(formAnswer).values(inputAnswers);
 
 		return {};

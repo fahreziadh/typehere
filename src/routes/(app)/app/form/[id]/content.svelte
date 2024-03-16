@@ -3,7 +3,7 @@
 	import { invalidateAll } from '$app/navigation';
 	import { Button } from '$lib/components/ui/button';
 	import type { formContent } from '$lib/db/schemas';
-	import { cn } from '$lib/utils';
+	import { cn, typeToLabel } from '$lib/utils';
 	import type { ActionResult } from '@sveltejs/kit';
 	import {
 		AtSign,
@@ -14,9 +14,7 @@
 		Trash,
 		UserSquare2Icon,
 		Text,
-
 		Hand
-
 	} from 'lucide-svelte';
 	import { onMount } from 'svelte';
 	import { sineOut } from 'svelte/easing';
@@ -39,6 +37,11 @@
 	$: isDirty =
 		JSON.stringify(selectedContent?.content) !==
 		data?.find((e) => e.id === selectedContent?.id)?.content;
+
+	$: if (selectedContent?.content.type && !selectedContent.content.title) {
+		const defaultTitle = typeToLabel(selectedContent.content.type).defaultTitle;
+		selectedContent.content.title = defaultTitle;
+	}
 
 	onMount(() => {
 		if (listContent.length > 0) {
@@ -177,6 +180,8 @@
 
 		applyAction(result);
 	}
+
+	$: listTypeUsed = [...new Set(listContent.map((e) => e.content.type))];
 </script>
 
 <div
@@ -198,22 +203,45 @@
 		<h1 class="text-xl lg:text-2xl xl:text-3xl font-medium opacity-30 absolute top-5 left-5">
 			#{selectedContent?.order}
 		</h1>
-
-		<Select
-			bind:selected={selectedContent.content.type}
-			placeholder="Pilih jenis pertanyaan"
-			class="absolute bottom-5 left-5"
-			options={[
-				// @ts-expect-error
-				{ value: 'greetings', label: 'Intro', icon: Hand },
-				// @ts-expect-error
-				{ value: 'text', label: 'Text', icon: Text },
-				// @ts-expect-error
-				{ value: 'email', label: 'Email', icon: AtSign },
-				// @ts-expect-error
-				{ value: 'name', label: 'Nama lengkap', icon: UserSquare2Icon }
-			]}
-		/>
+		<div class="absolute bottom-5 left-5 flex flex-row items-center gap-2">
+			<Select
+				bind:selected={selectedContent.content.type}
+				placeholder="Pilih jenis pertanyaan"
+				options={[
+					{
+						value: 'greetings',
+						label: 'Intro',
+						// @ts-expect-error
+						icon: Hand,
+						disable: listContent.filter((e) => e.content.type === 'greetings').length > 0
+					},
+					// @ts-expect-error
+					{ value: 'text', label: 'Text', icon: Text },
+					{
+						value: 'email',
+						label: 'Email',
+						// @ts-expect-error
+						icon: AtSign,
+						disable: listContent.filter((e) => e.content.type === 'email').length > 0
+					},
+					{
+						value: 'fullname',
+						label: 'Nama lengkap',
+						// @ts-expect-error
+						icon: UserSquare2Icon,
+						disable: listContent.filter((e) => e.content.type === 'fullname').length > 0
+					}
+				]}
+			/>
+			<Button
+				class=""
+				size="icon"
+				variant="secondary"
+				role="tooltip"
+				aria-label="Kategori pertanyaan sangat penting, agar data yang dimasukkan partisipan tersusun rapih."
+				data-microtip-position="top">?</Button
+			>
+		</div>
 		<div class="flex flex-row absolute bottom-5 right-5 gap-3">
 			<Button
 				type="button"
@@ -299,6 +327,12 @@
 					{/if}
 				</div>
 				<div
+					class="bottom-2 left-2 w-max absolute text-[10px] items-center inline-flex gap-1 text-foreground/50"
+				>
+					<svelte:component this={typeToLabel(content.content.type).icon} size={12} />
+					{typeToLabel(content.content.type).label}
+				</div>
+				<div
 					class="absolute top-2 left-2 w-[20px] flex items-center justify-center text-sm text-foreground/30 select-none font-medium"
 				>
 					<Hash size={16} />
@@ -343,4 +377,18 @@
 			</div>
 		</div>
 	{/each}
+</div>
+
+<div class=" mt-10 items-center">
+	<h1 class="opacity-70">Data yang di koleksi :</h1>
+	<div class="flex flex-wrap gap-2 mt-4">
+		{#each listTypeUsed as type}
+			<div
+				class="bg-secondary rounded-full px-4 py-1 text-sm select-none inline-flex gap-2 items-center border hover:opacity-50 transition"
+			>
+				<svelte:component this={typeToLabel(type).icon} size={14} />
+				{typeToLabel(type).label}
+			</div>
+		{/each}
+	</div>
 </div>

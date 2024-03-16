@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { navigating } from '$app/stores';
 	import { cn } from '$lib/utils';
+	import 'microtip/microtip.css';
 
 	import '../app.css';
 </script>
