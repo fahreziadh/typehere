@@ -50,19 +50,19 @@
 			<h1 class="mt-4 text-2xl flex flex-row items-center">
 				{selectedContentIndex + 1}. {selectedContent.content.title}
 			</h1>
-			<div class="flex flex-col gap-4 mt-4">
-				{#each selectedContent.answers as answer}
-					<div class="p-4 border rounded-md">
+			<div class="flex flex-col mt-4 divide-y border rounded-md">
+				{#each selectedContent.answers as answer, index}
+					<div class="py-4 px-6 hover:bg-secondary transition">
 						<div class="text-sm">
-							{answer.fullName} - <span class="opacity-60">{answer.email}</span>
+							{index+1}. {answer.fullName} - <span class="opacity-60 text-xs">{answer.email}</span>
 						</div>
-						<div class="font-medium mt-2">
+						<div class="font-medium mt-1">
 							{answer.answer}
 						</div>
 					</div>
 				{/each}
 				{#if selectedContent.answers.length === 0}
-					<p>Belum ada respon </p>
+					<p class="p-4">Belum ada respon </p>
 				{/if}
 			</div>
 		</div>
