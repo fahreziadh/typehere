@@ -18,7 +18,7 @@
 		property="og:description"
 		content="Open source Super clean & simple Form building & Survey 🍕"
 	/>
-	<meta property="og:image" content="https://typehere.fun/screenshot.webp" />
+	<meta property="og:image" content="https://typehere.fun/og.webp" />
 
 	<!-- Twitter Meta Tags -->
 	<meta name="twitter:card" content="summary_large_image" />
@@ -30,7 +30,7 @@
 		content="Open source Super clean & simple Form building & Survey 🍕"
 	/>
 
-	<meta name="twitter:image" content="https://typehere.fun/screenshot.webp" />
+	<meta name="twitter:image" content="https://typehere.fun/og.webp" />
 </svelte:head>
 <div
 	class={cn(
