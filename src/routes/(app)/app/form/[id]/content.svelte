@@ -319,7 +319,7 @@
 					content.id === selectedContent?.id ? 'border-foreground' : 'border-border opacity-50 hover:border-foreground/30'
 				)}
 			>
-				<div class="p-4 text-left font-semibold">
+				<div class="p-4 text-left font-semibold md:textbase text-sm">
 					{#if selectedContent?.id === content.id}
 						{selectedContent.content.title ? selectedContent.content.title : `Untitled`}
 					{:else}
