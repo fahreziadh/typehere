@@ -29,7 +29,6 @@ export const load = (async ({ params }) => {
 		});
 	}
 
-	console.log('dataForm', dataForm);
 	return { dataForm };
 }) satisfies PageServerLoad;
 
