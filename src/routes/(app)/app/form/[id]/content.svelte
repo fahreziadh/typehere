@@ -279,8 +279,7 @@
 				>Deskripsi</label
 			>
 		{/if}
-		<input
-			type="text"
+		<textarea
 			spellcheck="false"
 			bind:value={selectedContent.content.description}
 			name="description"

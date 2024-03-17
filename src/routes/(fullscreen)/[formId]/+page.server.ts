@@ -1,9 +1,11 @@
 import { db } from '$lib/db/db';
 import { formAnswer } from '$lib/db/schemas';
+import { error } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 
 export const load = (async ({ params }) => {
 	const formId = params.formId;
+
 	const dataForm = await db.query.form.findFirst({
 		with: {
 			contents: {
@@ -21,6 +23,13 @@ export const load = (async ({ params }) => {
 		}
 	});
 
+	if (!dataForm) {
+		error(404, {
+			message: 'Not found'
+		});
+	}
+
+	console.log('dataForm', dataForm);
 	return { dataForm };
 }) satisfies PageServerLoad;
 
